@@ -4,13 +4,17 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start": "node index.js",
+    "start": "node server/index.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [],
   "author": "Ernesto Montada Romero",
   "license": "MIT",
   "dependencies": {
+    "onoff": "^2.0.0",
     "serialport": "^6.1.1"
+  },
+  "devDependencies": {
+    "socket.io-client": "^2.0.4"
   }
 }
