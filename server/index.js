@@ -1,8 +1,6 @@
 const readline = require('readline');
-// const { XBee } = require('./deps/XBee');
-// const xbee = new XBee('COM1');
-const { socketXBee } = require('./deps/socketXbee');
-const xbee = new socketXBee('http://192.168.43.216:3000/');
+const { XBee } = require('./deps/XBee');
+const xbee = new XBee(process.env.SATSERIAL || 'COM4');
 
 const l = readline.createInterface({
   input: process.stdin,
@@ -12,6 +10,11 @@ const l = readline.createInterface({
 l.on('line', d => {
   xbee.sendData(d);
 })
+let i = 0;
+
+setInterval(() => {
+  xbee.sendData(i++)
+}, 1000)
 
 xbee.on('data', d => {
   console.log(d);
