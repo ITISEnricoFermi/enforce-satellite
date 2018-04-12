@@ -12,7 +12,7 @@ var __extends = (this && this.__extends) || (function () {
 Object.defineProperty(exports, "__esModule", { value: true });
 var SerialPort = require("serialport");
 var events_1 = require("events");
-exports.DELIMETER = "\n";
+exports.DELIMETER = "\n"; // 0x0A
 exports.DEFAULT_BAUDRATE = 9600;
 /**
  * Wrapper class around SerialPort default methods
@@ -34,11 +34,22 @@ var XBee = /** @class */ (function (_super) {
         });
         _this.parser = new SerialPort.parsers.Readline({ delimiter: exports.DELIMETER });
         _this.port.pipe(_this.parser);
-        _this.parser.on("data", function (data) {
-            _this.emit("data", data);
+        _this.parser.on("data", function () {
+            var args = [];
+            for (var _i = 0; _i < arguments.length; _i++) {
+                args[_i] = arguments[_i];
+            }
+            _this.emit("data", args);
         });
         return _this;
     }
+    /**
+     * The same as .on("data", callback)
+     * @param callback The callback with the data
+     */
+    XBee.prototype.onData = function (callback) {
+        this.on("data", callback);
+    };
     /**
      * Sends some data through the serial interface
      * @param data The data to send in the form of a string, buffer, or number

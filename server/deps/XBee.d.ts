@@ -9,13 +9,18 @@ export declare const DEFAULT_BAUDRATE: number;
  */
 export declare class XBee extends EventEmitter {
     port: SerialPort;
-    parser: SerialPort.parsers.Readline;
+    private parser;
     /**
      * Initialize the xbee class and bind it to a serial port
      * @param port The port to use
      * @param baudRate The baud rate for the comunication
      */
     constructor(port: string, baudRate?: number);
+    /**
+     * The same as .on("data", callback)
+     * @param callback The callback with the data
+     */
+    onData(callback: (...args: any[]) => void): void;
     /**
      * Sends some data through the serial interface
      * @param data The data to send in the form of a string, buffer, or number
