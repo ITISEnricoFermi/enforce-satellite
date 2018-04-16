@@ -9,7 +9,7 @@ class Comms {
 
     on(event, callback) {
         if (this.events[event] === undefined) this.events[event] = []
-        this.events[event].add(callback)
+        this.events[event].push(callback)
     }
 
     trigger(event) {
