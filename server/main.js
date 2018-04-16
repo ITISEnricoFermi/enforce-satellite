@@ -11,16 +11,14 @@ let config = {
 comms.on('data', (commandString) => {
     switch (commandString[0]) {
         case 'm':
-            let commandFunction
             let motorState
-
-            if (commandString[1] === 'r') commandFunction = motors.setRight
-            if (commandString[1] === 'l') commandFunction = motors.setLeft
 
             if (commandString[2] === '0') motorState = true
             if (commandString[2] === '1') motorState = false
 
-            commandFunction(motorState)
+            if (commandString[1] === 'r') motors.setRight(motorState)
+            if (commandString[1] === 'l') motors.setLeft(motorState)
+
             break;
     }
 })
