@@ -4,23 +4,23 @@ const comms = new (require('./mock/comms.mock'))()
 const motors = new (require('./deps/motors'))()
 
 let config = {
-    record: false,
-    transmit: true
+	record: false,
+	transmit: true
 }
 
 comms.on('data', (commandString) => {
-    switch (commandString[0]) {
-        case 'm':
-            let motorState
+	switch (commandString[0]) {
+		case 'm':
+			let motorState
 
-            if (commandString[2] === '0') motorState = true
-            if (commandString[2] === '1') motorState = false
+			if (commandString[2] === '0') motorState = true
+			if (commandString[2] === '1') motorState = false
 
-            if (commandString[1] === 'r') motors.setRight(motorState)
-            if (commandString[1] === 'l') motors.setLeft(motorState)
+			if (commandString[1] === 'r') motors.setRight(motorState)
+			if (commandString[1] === 'l') motors.setLeft(motorState)
 
-            break;
-    }
+		break;
+	}
 })
 
 // sensors.on('data', (data) => {
