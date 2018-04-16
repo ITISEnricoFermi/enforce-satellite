@@ -12,7 +12,7 @@ const l = readline.createInterface({
 
 function theData() {
   let data = sensors.gps.GetData()
-  fs.writeFileSync("./gps-data.js", JSON.stringify(data, null, 2)+",")
+  fs.appendFileSync("./gps-data.json", JSON.stringify(data, null, 2)+",")
   return data
 }
 
