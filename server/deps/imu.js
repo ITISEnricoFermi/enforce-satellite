@@ -16,7 +16,7 @@ class IMU extends EventEmitter {
     checkQuaternion() {
         imu.getQuaternion((data) => {
             this.emit('quaternion', data)
-            if(this.quaternionChecker) this.checkQuaternion()
+            if(this.imu.quaternionChecker) this.checkQuaternion()
         })
     }
 
