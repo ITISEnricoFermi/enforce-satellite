@@ -39,4 +39,4 @@ class Targeter {
     }
 }
 
-module.exports = Targeter
+module.exports = new Targeter()
