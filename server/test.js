@@ -1,7 +1,6 @@
-const imu = require('./deps/imu')()
+const imu = require('deps/imu')()
+const sensors = require('lib/sensors')({imu: imu})
 
-imu.startReading()
-
-imu.on('quaternion', console.log)
+sensors.on('quaternion', console.log)
 
 //setTimeout(() => imu.stopReading(), 5000)
