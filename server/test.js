@@ -4,4 +4,4 @@ imu.startReading()
 
 imu.on('quaternion', console.log)
 
-setTimeout(imu.stopReading, 5000)
+//setTimeout(() => imu.stopReading(), 5000)
