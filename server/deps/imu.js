@@ -20,12 +20,22 @@ class IMU extends EventEmitter {
             }), 0)
     }
 
+    checkEuler() {
+        this.eulerChecker = setTimeout(() =>
+            this.imu.getEuler((error, data) => {
+                this.emit('euler', data)
+                this.checkEuler()
+            }), 0)
+    }
+
     startReading() {
         this.checkQuaternion()
+        this.checkEuler()
     }
 
     stopReading() {
         clearTimeout(this.quaternionChecker)
+        clearTimeout(this.eulerChecker)
     }
 }
 

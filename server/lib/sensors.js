@@ -11,6 +11,10 @@ class Sensors extends EventEmitter {
         this.imu.on('quaternion', (data) => {
             this.emit('quaternion', data)
         })
+
+        this.imu.on('euler', (data) => {
+            this.emit('euler', data)
+        })
     }
 }
 
