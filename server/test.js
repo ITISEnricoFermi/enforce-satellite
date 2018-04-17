@@ -1,8 +1,8 @@
-var BNO055 = require('bno055', {device: '/dev/i2c-0'});
+var BNO055 = require('bno055');
  
 var async = require('async');
  
-var imu = new BNO055();
+var imu = new BNO055({device: '/dev/i2c-0'});
  
 imu.beginNDOF(function() {
     console.info('imu running');
