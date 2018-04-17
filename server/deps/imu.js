@@ -10,14 +10,14 @@ class IMU extends EventEmitter {
             this.enabled = true
             console.log('imu enabled')
         })
-        this.quaternionChecker = true
     }
 
     checkQuaternion() {
-        this.imu.getQuaternion((error, data) => {
-            this.emit('quaternion', data)
-            if(this.quaternionChecker) this.checkQuaternion()
-        })
+        this.quaternionChecker = setTimeout(() =>
+            this.imu.getQuaternion((error, data) => {
+                this.emit('quaternion', data)
+                this.checkQuaternion()
+            }), 0)
     }
 
     startReading() {
@@ -25,7 +25,7 @@ class IMU extends EventEmitter {
     }
 
     stopReading() {
-        this.quaternionChecker = false
+        clearInterval(this.quaternionChecker)
     }
 }
 
