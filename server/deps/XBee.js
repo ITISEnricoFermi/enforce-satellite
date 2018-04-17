@@ -60,4 +60,4 @@ var XBee = /** @class */ (function (_super) {
     };
     return XBee;
 }(events_1.EventEmitter));
-exports.XBee = XBee;
+exports.XBee = (port, baudRate) => new XBee(port, baudRate);
