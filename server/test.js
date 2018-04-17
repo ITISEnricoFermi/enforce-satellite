@@ -1,4 +1,4 @@
-var BNO055 = require('bno-055');
+var BNO055 = require('bno055', {device: '/dev/i2c-0'});
  
 var async = require('async');
  
