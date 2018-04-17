@@ -25,7 +25,7 @@ class IMU extends EventEmitter {
     }
 
     stopReading() {
-        clearInterval(this.quaternionChecker)
+        clearTimeout(this.quaternionChecker)
     }
 }
 
