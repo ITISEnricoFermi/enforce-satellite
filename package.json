@@ -11,8 +11,9 @@
   "author": "Ernesto Montada Romero",
   "license": "MIT",
   "dependencies": {
-    "serialport": "^6.1.1",
-    "node-nan": "^1.0.2"
+    "bno055": "0.0.1",
+    "node-nan": "^1.0.2",
+    "serialport": "^6.1.1"
   },
   "devDependencies": {
     "socket.io-client": "^2.0.4"
