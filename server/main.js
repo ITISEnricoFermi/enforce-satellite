@@ -7,6 +7,7 @@ const pilot = require('./lib/pilot')(motors)
 const sensors = require('./mock/sensors.mock')
 
 let config = {
+<<<<<<< HEAD
     record: false,
     transmit: true,
     autopilot: true
@@ -17,13 +18,23 @@ comms.on('data', (commandString) => {
     switch (commandString[0]) {
         case 'm':
             let motorState
+=======
+	record: false,
+	transmit: true
+}
 
-            if (commandString[2] === '0') motorState = true
-            if (commandString[2] === '1') motorState = false
+comms.on('data', (commandString) => {
+	switch (commandString[0]) {
+		case 'm':
+			let motorState
+>>>>>>> 0c3611e0c00e3e4dc4a572c2c5470772b5bcd466
 
-            if (commandString[1] === 'r') motors.setRight(motorState)
-            if (commandString[1] === 'l') motors.setLeft(motorState)
+			if (commandString[2] === '0') motorState = true
+			if (commandString[2] === '1') motorState = false
 
-            break;
-    }
+			if (commandString[1] === 'r') motors.setRight(motorState)
+			if (commandString[1] === 'l') motors.setLeft(motorState)
+
+		break;
+	}
 })
