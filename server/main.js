@@ -1,14 +1,19 @@
-// const sensors = require('sensors')
+// const sensors = require('./deps/sensors')()
 // const db = require('database')
-const comms = new (require('./mock/comms.mock'))()
-const motors = new (require('./deps/motors'))()
+const comms = require('./mock/comms.mock')
+const motors = require('./mock/motors.mock')
+const targeter = require('./lib/targeter')
+const pilot = require('./lib/pilot')(motors)
+const sensors = require('./mock/sensors.mock')
 
 let config = {
     record: false,
-    transmit: true
+    transmit: true,
+    autopilot: true
 }
 
 comms.on('data', (commandString) => {
+    console.log('Received command: ' + commandString)
     switch (commandString[0]) {
         case 'm':
             let motorState
@@ -22,8 +27,3 @@ comms.on('data', (commandString) => {
             break;
     }
 })
-
-// sensors.on('data', (data) => {
-//     if (config.record) db.save(data)
-//     if (config.transmit) comms.send(data)
-// })
