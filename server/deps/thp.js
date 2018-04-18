@@ -1,5 +1,7 @@
 const BME280 = require('./BME280');
-const { EventEmitter } = require("events")
+const {
+  EventEmitter
+} = require("events")
 
 const options = {
   i2cBusNo: 0,
@@ -20,15 +22,13 @@ class THP extends EventEmitter {
   }
 
   readSensorData() {
-    bme280.readSensorData()
-      .then((data) => {
-        this.emit("data", data)
-        this.to = setTimeout(this.readSensorData, 0);
+    this.to = setTimeout(() => {
+      bme280.readSensorData((err, data) => {
+        if (err) this.emit("err", err)
+        else this.emit("data", data)
+        this.readSensorData()
       })
-      .catch((err) => {
-        console.log(`BME280 read error: ${err}`);
-        this.to = setTimeout(this.readSensorData, 0);
-      });
+    })
   }
 
   startReading() {

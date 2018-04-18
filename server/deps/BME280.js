@@ -13,13 +13,13 @@ class BME280 {
   constructor(options) {
     const i2c = require('i2c-bus');
 
-    this.i2cBusNo = (options && options.hasOwnProperty('i2cBusNo')) ? options.i2cBusNo : 1;    
+    this.i2cBusNo = (options && options.hasOwnProperty('i2cBusNo')) ? options.i2cBusNo : 1;
     this.i2cBus = i2c.openSync(this.i2cBusNo);
     this.i2cAddress = (options && options.hasOwnProperty('i2cAddress')) ? options.i2cAddress : BME280.BME280_DEFAULT_I2C_ADDRESS();
 
-    this.I2C_ADDRESS_B   = 0x76;
-    this.I2C_ADDRESS_A   = 0x77;
-    this.CHIP_ID         = 0x58;
+    this.I2C_ADDRESS_B = 0x76;
+    this.I2C_ADDRESS_A = 0x77;
+    this.CHIP_ID = 0x58;
 
     this.REGISTER_DIG_T1 = 0x88;
     this.REGISTER_DIG_T2 = 0x8A;
@@ -43,44 +43,40 @@ class BME280 {
     this.REGISTER_DIG_H6 = 0xE7;
 
     this.REGISTER_CHIPID = 0xD0;
-    this.REGISTER_RESET  = 0xE0;
+    this.REGISTER_RESET = 0xE0;
 
-    this.REGISTER_CONTROL_HUM   = 0xF2;
-    this.REGISTER_CONTROL       = 0xF4;
+    this.REGISTER_CONTROL_HUM = 0xF2;
+    this.REGISTER_CONTROL = 0xF4;
     this.REGISTER_PRESSURE_DATA = 0xF7;
-    this.REGISTER_TEMP_DATA     = 0xFA;
+    this.REGISTER_TEMP_DATA = 0xFA;
     this.REGISTER_HUMIDITY_DATA = 0xFD;
   }
 
   init() {
     return new Promise((resolve, reject) => {
       this.i2cBus.writeByte(this.i2cAddress, this.REGISTER_CHIPID, 0, (err) => {
-        if(err) {
+        if (err) {
           return reject(err);
         }
         this.i2cBus.readByte(this.i2cAddress, this.REGISTER_CHIPID, (err, chipId) => {
-          if(err) {
+          if (err) {
             return reject(err);
-          }
-
-          else if(chipId !== BME280.CHIP_ID_BME280() &&
-                  chipId !== BME280.CHIP_ID1_BMP280() &&
-                  chipId !== BME280.CHIP_ID2_BMP280() &&
-                  chipId !== BME280.CHIP_ID3_BMP280()) {
+          } else if (chipId !== BME280.CHIP_ID_BME280() &&
+            chipId !== BME280.CHIP_ID1_BMP280() &&
+            chipId !== BME280.CHIP_ID2_BMP280() &&
+            chipId !== BME280.CHIP_ID3_BMP280()) {
             return reject(`Unexpected BMx280 chip ID: 0x${chipId.toString(16)}`);
-          }
-
-          else {
+          } else {
             console.log(`Found BMx280 chip ID 0x${chipId.toString(16)} on bus i2c-${this.i2cBusNo}, address 0x${this.i2cAddress.toString(16)}`);
             this.loadCalibration((err) => {
-              if(err) {
+              if (err) {
                 return reject(err);
               }
 
               // Humidity 16x oversampling
               //
               this.i2cBus.writeByte(this.i2cAddress, this.REGISTER_CONTROL_HUM, 0b00000101, (err) => {
-                if(err) {
+                if (err) {
                   return reject(err);
                 }
 
@@ -110,79 +106,77 @@ class BME280 {
     });
   }
 
-  readSensorData() {
-    return new Promise((resolve, reject) => {
-      if(!this.cal) {
-        return reject('You must first call bme280.init()');
+  readSensorData(callback) {
+    if (!this.cal) {
+      return callback('You must first call bme280.init()');
+    }
+
+    // Grab temperature, humidity, and pressure in a single read
+    //
+    this.i2cBus.readI2cBlock(this.i2cAddress, this.REGISTER_PRESSURE_DATA, 8, new Buffer(8), (err, bytesRead, buffer) => {
+      if (err) {
+        return callback(err);
       }
 
-      // Grab temperature, humidity, and pressure in a single read
+      // Temperature (temperature first since we need t_fine for pressure and humidity)
       //
-      this.i2cBus.readI2cBlock(this.i2cAddress, this.REGISTER_PRESSURE_DATA, 8, new Buffer(8), (err, bytesRead, buffer) => {
-        if(err) {
-          return reject(err);
-        }
+      let adc_T = BME280.uint20(buffer[3], buffer[4], buffer[5]);
+      let tvar1 = ((((adc_T >> 3) - (this.cal.dig_T1 << 1))) * this.cal.dig_T2) >> 11;
+      let tvar2 = (((((adc_T >> 4) - this.cal.dig_T1) * ((adc_T >> 4) - this.cal.dig_T1)) >> 12) * this.cal.dig_T3) >> 14;
+      let t_fine = tvar1 + tvar2;
 
-        // Temperature (temperature first since we need t_fine for pressure and humidity)
-        //
-        let adc_T = BME280.uint20(buffer[3], buffer[4], buffer[5]);
-        let tvar1 = ((((adc_T >> 3) - (this.cal.dig_T1 << 1))) * this.cal.dig_T2) >> 11;
-        let tvar2  = (((((adc_T >> 4) - this.cal.dig_T1) * ((adc_T >> 4) - this.cal.dig_T1)) >> 12) * this.cal.dig_T3) >> 14;
-        let t_fine = tvar1 + tvar2;
+      let temperature_C = ((t_fine * 5 + 128) >> 8) / 100;
 
-        let temperature_C = ((t_fine * 5 + 128) >> 8) / 100;
+      // Pressure
+      //
+      let adc_P = BME280.uint20(buffer[0], buffer[1], buffer[2]);
+      let pvar1 = t_fine / 2 - 64000;
+      let pvar2 = pvar1 * pvar1 * this.cal.dig_P6 / 32768;
+      pvar2 = pvar2 + pvar1 * this.cal.dig_P5 * 2;
+      pvar2 = pvar2 / 4 + this.cal.dig_P4 * 65536;
+      pvar1 = (this.cal.dig_P3 * pvar1 * pvar1 / 524288 + this.cal.dig_P2 * pvar1) / 524288;
+      pvar1 = (1 + pvar1 / 32768) * this.cal.dig_P1;
 
-        // Pressure
-        //
-        let adc_P = BME280.uint20(buffer[0], buffer[1], buffer[2]);
-        let pvar1 = t_fine / 2 - 64000;
-        let pvar2 = pvar1 * pvar1 * this.cal.dig_P6 / 32768;
-        pvar2 = pvar2 + pvar1 * this.cal.dig_P5 * 2;
-        pvar2 = pvar2 / 4 + this.cal.dig_P4 * 65536;
-        pvar1 = (this.cal.dig_P3 * pvar1 * pvar1 / 524288 + this.cal.dig_P2 * pvar1) / 524288;
-        pvar1 = (1 + pvar1 / 32768) * this.cal.dig_P1;
+      let pressure_hPa = 0;
 
-        let pressure_hPa = 0;
+      if (pvar1 !== 0) {
+        let p = 1048576 - adc_P;
+        p = ((p - pvar2 / 4096) * 6250) / pvar1;
+        pvar1 = this.cal.dig_P9 * p * p / 2147483648;
+        pvar2 = p * this.cal.dig_P8 / 32768;
+        p = p + (pvar1 + pvar2 + this.cal.dig_P7) / 16;
 
-        if(pvar1 !== 0) {
-          let p = 1048576 - adc_P;
-          p = ((p - pvar2 / 4096) * 6250) / pvar1;
-          pvar1 = this.cal.dig_P9 * p * p / 2147483648;
-          pvar2 = p * this.cal.dig_P8 / 32768;
-          p = p + (pvar1 + pvar2 + this.cal.dig_P7) / 16;
+        pressure_hPa = p / 100;
+      }
 
-          pressure_hPa = p / 100;
-        }
+      // Humidity (available on the BME280, will be zero on the BMP280 since it has no humidity sensor)
+      //
+      let adc_H = BME280.uint16(buffer[6], buffer[7]);
 
-        // Humidity (available on the BME280, will be zero on the BMP280 since it has no humidity sensor)
-        //
-        let adc_H = BME280.uint16(buffer[6], buffer[7]);
+      let h = t_fine - 76800;
+      h = (adc_H - (this.cal.dig_H4 * 64 + this.cal.dig_H5 / 16384 * h)) *
+        (this.cal.dig_H2 / 65536 * (1 + this.cal.dig_H6 / 67108864 * h * (1 + this.cal.dig_H3 / 67108864 * h)));
+      h = h * (1 - this.cal.dig_H1 * h / 524288);
 
-        let h = t_fine - 76800;
-        h = (adc_H - (this.cal.dig_H4 * 64 + this.cal.dig_H5 / 16384 * h)) *
-            (this.cal.dig_H2 / 65536 * (1 + this.cal.dig_H6 / 67108864 * h * (1 + this.cal.dig_H3 / 67108864 * h)));
-        h = h * (1 - this.cal.dig_H1 * h / 524288);
+      let humidity = (h > 100) ? 100 : (h < 0 ? 0 : h);
 
-        let humidity = (h > 100) ? 100 : (h < 0 ? 0 : h);
-
-        resolve({
-          temperature_C : temperature_C,
-          humidity      : humidity,
-          pressure_hPa  : pressure_hPa
-        });
+      callback(null, {
+        temperature_C: temperature_C,
+        humidity: humidity,
+        pressure_hPa: pressure_hPa
       });
     });
   }
 
   loadCalibration(callback) {
     this.i2cBus.readI2cBlock(this.i2cAddress, this.REGISTER_DIG_T1, 24, new Buffer(24), (err, bytesRead, buffer) => {
-      let h1   = this.i2cBus.readByteSync(this.i2cAddress, this.REGISTER_DIG_H1);
-      let h2   = this.i2cBus.readWordSync(this.i2cAddress, this.REGISTER_DIG_H2);
-      let h3   = this.i2cBus.readByteSync(this.i2cAddress, this.REGISTER_DIG_H3);
-      let h4   = this.i2cBus.readByteSync(this.i2cAddress, this.REGISTER_DIG_H4);
-      let h5   = this.i2cBus.readByteSync(this.i2cAddress, this.REGISTER_DIG_H5);
+      let h1 = this.i2cBus.readByteSync(this.i2cAddress, this.REGISTER_DIG_H1);
+      let h2 = this.i2cBus.readWordSync(this.i2cAddress, this.REGISTER_DIG_H2);
+      let h3 = this.i2cBus.readByteSync(this.i2cAddress, this.REGISTER_DIG_H3);
+      let h4 = this.i2cBus.readByteSync(this.i2cAddress, this.REGISTER_DIG_H4);
+      let h5 = this.i2cBus.readByteSync(this.i2cAddress, this.REGISTER_DIG_H5);
       let h5_1 = this.i2cBus.readByteSync(this.i2cAddress, this.REGISTER_DIG_H5 + 1);
-      let h6   = this.i2cBus.readByteSync(this.i2cAddress, this.REGISTER_DIG_H6);
+      let h6 = this.i2cBus.readByteSync(this.i2cAddress, this.REGISTER_DIG_H6);
 
       this.cal = {
         dig_T1: BME280.uint16(buffer[1], buffer[0]),
@@ -245,7 +239,7 @@ class BME280 {
     return ((msb << 8 | lsb) << 8 | xlsb) >> 4;
   }
 
-  static convertCelciusToFahrenheit(c) { 
+  static convertCelciusToFahrenheit(c) {
     return c * 9 / 5 + 32;
   }
 
@@ -259,19 +253,19 @@ class BME280 {
 
   static calculateHeatIndexCelcius(temperature_C, humidity) {
     return -8.784695 + 1.61139411 * temperature_C + 2.33854900 * humidity +
-           -0.14611605 * temperature_C * humidity + -0.01230809 * Math.pow(temperature_C, 2) +
-           -0.01642482 * Math.pow(humidity, 2) + 0.00221173 * Math.pow(temperature_C, 2) * humidity +
-           0.00072546 * temperature_C * Math.pow(humidity, 2) +
-           -0.00000358 * Math.pow(temperature_C, 2) * Math.pow(humidity, 2);
+      -0.14611605 * temperature_C * humidity + -0.01230809 * Math.pow(temperature_C, 2) +
+      -0.01642482 * Math.pow(humidity, 2) + 0.00221173 * Math.pow(temperature_C, 2) * humidity +
+      0.00072546 * temperature_C * Math.pow(humidity, 2) +
+      -0.00000358 * Math.pow(temperature_C, 2) * Math.pow(humidity, 2);
   }
 
   static calculateDewPointCelcius(temperature_C, humidity) {
-    return 243.04 * (Math.log(humidity/100.0) + ((17.625 * temperature_C)/(243.04 + temperature_C))) / 
-           (17.625 - Math.log(humidity/100.0) - ((17.625 * temperature_C)/(243.04 + temperature_C)));
+    return 243.04 * (Math.log(humidity / 100.0) + ((17.625 * temperature_C) / (243.04 + temperature_C))) /
+      (17.625 - Math.log(humidity / 100.0) - ((17.625 * temperature_C) / (243.04 + temperature_C)));
   }
 
   static calculateAltitudeMeters(pressure_hPa, seaLevelPressure_hPa) {
-    if(!seaLevelPressure_hPa) {
+    if (!seaLevelPressure_hPa) {
       seaLevelPressure_hPa = 1013.25;
     }
 
