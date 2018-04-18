@@ -5,7 +5,7 @@ const comms = require('./lib/comms')(xbee)
 const motors = require('./mock/motors.mock')
 const targeter = require('./lib/targeter')
 const pilot = require('./lib/pilot')(motors)
-const sensors = require('./mock/sensors.mock')
+const sensors = require('./lib/sensors')({})
 
 let config = {
     record: false,

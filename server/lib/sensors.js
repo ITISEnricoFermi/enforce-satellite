@@ -54,4 +54,7 @@ class Sensors extends EventEmitter {
     }
 }
 
+/**
+ * @param {{gps, imu}} sensors 
+ */
 module.exports = (sensors) => new Sensors(sensors)
