@@ -3,7 +3,7 @@ const {
 } = require("events")
 const {
   XBee
-} = require("../deps/XBee");
+} = require("module-xbee");
 
 
 /**
