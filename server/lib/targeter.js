@@ -1,6 +1,6 @@
 class Targeter {
     constructor() {
-        this.targetCoordinates = {
+        this.targetPosition = {
             x: 40,
             y: 20
         }
@@ -13,6 +13,10 @@ class Targeter {
         this.targetOrientation = 90
         this.currentOrientation = 0
         this.deadzone = 10
+    }
+
+    setTargetPosition(position) {
+        this.targetPosition = position
     }
 
     setCurrentPosition(position) {
