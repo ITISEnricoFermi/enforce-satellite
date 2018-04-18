@@ -17,7 +17,7 @@ comms.onE("data", d => {
 })
 
 line.on("line", line => {
-  comms.send(line)
+  comms.send(null ,line)
 })
 
 // sensors.on('quaternion', (data) => {
