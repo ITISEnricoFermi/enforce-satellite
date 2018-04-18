@@ -7,10 +7,18 @@
 const xbee = new (require("./deps/XBee").XBee)("/dev/ttyS1", 115200)
 const comms = require("./lib/comms")(xbee)
 
-comms.send("loc", {test: 0342})
+const line = require("readline").createInterface({
+  input: process.stdin,
+  output: process.stdout
+})
 
-comms.onE("data", d => console.log(d))
-comms.onE("command", d => console.log(d))
+comms.onE("data", d => {
+  console.log(d)
+})
+
+line.on("line", line => {
+  comms.send(line)
+})
 
 // sensors.on('quaternion', (data) => {
 //     targeter.setCurrentOrientation(data.z)
