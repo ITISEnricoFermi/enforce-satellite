@@ -1,13 +1,16 @@
 class Pilot {
     constructor (motors) {
-        this.debugEnabled = true
-
         this.motors = motors
 
         this.config = {
             autopilotEnabled: false,
-            updateInterval: 100
+            updateInterval: 100,
+            debugEnabled: false
         }
+    }
+
+    setDebug(state) {
+        this.config.debugEnabled = state
     }
 
     enableAutopilot(targeter) {
@@ -35,25 +38,25 @@ class Pilot {
     }
 
     turnLeft() {
-        if (this.debugEnabled) console.log('Turning left')
+        if (this.config.debugEnabled) console.log('Turning left')
         this.motors.setRight(false)
         this.motors.setLeft(true)
     }
 
     turnRight() {
-        if (this.debugEnabled) console.log('Turning right')
+        if (this.config.debugEnabled) console.log('Turning right')
         this.motors.setRight(true)
         this.motors.setLeft(false)
     }
 
     stopTurning() {
-        if (this.debugEnabled) console.log('Turning stopped')
+        if (this.config.debugEnabled) console.log('Turning stopped')
         this.motors.setRight(false)
         this.motors.setLeft(false)
     }
 
     startBreaking() {
-        if (this.debugEnabled) console.log('Breaking')
+        if (this.config.debugEnabled) console.log('Breaking')
         this.motors.setRight(true)
         this.motors.setLeft(true)        
     }
