@@ -3,7 +3,7 @@
 const xbee = new (require("module-xbee").XBee)(process.env.XBEEPORT || "/dev/ttyS2", 115200)
 const comms = require('./lib/comms')(xbee)
 //const imu = require("./deps/imu")()
-const thp = require("./deps/thp")
+const thp = require("./deps/thp")()
 //const gps = require("./deps/gps")("/dev/ttyS1")
 // const motors = require('./mock/motors.mock')
 // const targeter = require('./lib/targeter')

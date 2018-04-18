@@ -21,21 +21,13 @@ class THP extends EventEmitter {
   readSensorData() {
     this.bme280.readSensorData()
       .then((data) => {
-        this.emmit("data", data)
+        this.emit("data", data)
         this.to = setTimeout(this.readSensorData, 0);
       })
       .catch((err) => {
         console.log(`BME280 read error: ${err}`);
         this.to = setTimeout(this.readSensorData, 0);
       });
-  }
-
-  onm(nome, lis) {
-    this.on(nome, lis)
-  }
-
-  emmit(nome, ...arg) {
-    this.emit(nome, arg)
   }
 
   startReading() {

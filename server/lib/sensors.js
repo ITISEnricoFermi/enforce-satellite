@@ -36,7 +36,7 @@ class Sensors extends EventEmitter {
 
         if (SENSORS.thp) {
             this.thp = sensors.thp
-            this.thp.onm("data", d => {
+            this.thp.on("data", d => {
                 this.emit("temp", d.temperature_C)
             })
         }
