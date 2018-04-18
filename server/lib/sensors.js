@@ -6,7 +6,8 @@ const IMU = require("../deps/imu")
 
 const SENSORS = {
     gps: false,
-    imu: false
+    imu: false,
+    thp: false
 }
 
 class Sensors extends EventEmitter {
@@ -15,6 +16,7 @@ class Sensors extends EventEmitter {
 
         SENSORS.gps = sensors.hasOwnProperty("gps")
         SENSORS.imu = sensors.hasOwnProperty("imu")
+        SENSORS.thp = sensors.hasOwnProperty("thp")        
 
         if (SENSORS.imu) {
             this.imu = sensors.imu
@@ -30,6 +32,14 @@ class Sensors extends EventEmitter {
             this.gps = sensors.gps
             this.gps.StartLoop()
             this.gps.on("data", d => this.emit("gps", d))
+        }
+
+        if (SENSORS.thp) {
+            this.thp = sensors.thp
+            this.thp.StartLoop()
+            this.thp.on("data", d => {
+                this.emit("temp", d.temperature_C)
+            })
         }
     }
 
@@ -51,6 +61,16 @@ class Sensors extends EventEmitter {
     imuOff() {
         if (SENSORS.imu)
             this.imu.stopReading()
+    }
+
+    thpOn() {
+        if (SENSORS.thp)
+            this.thp.startReading()
+    }
+
+    thpOff() {
+        if (SENSORS.thp)
+            this.thp.stopReading()
     }
 }
 
