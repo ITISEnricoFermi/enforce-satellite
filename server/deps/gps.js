@@ -5,6 +5,7 @@ const gps = require("node-nan")
 
 class Gps extends EventEmitter {
   constructor(port) {
+    super()
     this.port = port
     this._on = false
     this.Start()
