@@ -9,15 +9,7 @@ let sensori = {
 }
 
 module.exports.ToggleGps = () => {
-  if (sensori.gps[0]) {
-    sensori.gps[1].Start(process.env.GPSPORT, (err) => {
-      if (err) throw err
-      sensori.gps[0] = true
-    })
-  } else {
-    sensori.gps[1].Stop()
-    sensori.gps[0] = false
-  }
+
 }
 
 module.exports.ToggleBmeTPU = () => {

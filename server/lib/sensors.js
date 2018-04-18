@@ -1,20 +1,56 @@
-const { EventEmitter } = require('events')
+const {
+    EventEmitter
+} = require('events')
+
+const IMU = require("../deps/imu")
+
+const SENSORS = {
+    gps: false,
+    imu: false
+}
 
 class Sensors extends EventEmitter {
     constructor(sensors) {
         super()
 
-        this.imu = sensors.imu
+        SENSORS.gps = sensors.hasOwnProperty("gps")
+        SENSORS.imu = sensors.hasOwnProperty("imu")
 
-        this.imu.startReading()
+        if (SENSORS.imu) {
+            this.imu = sensors.imu
+            this.imu.startReading()
+            this.imu.on('quaternion', (data) => {
+                this.emit('quaternion', data)
+            })
+            this.imu.on('euler', (data) => {
+                this.emit('euler', data)
+            })
+        }
+        if (SENSORS.gps) {
+            this.gps = sensors.gps
+            this.gps.StartLoop()
+            this.gps.on("data", d => this.emit("gps", d))
+        }
+    }
 
-        this.imu.on('quaternion', (data) => {
-            this.emit('quaternion', data)
-        })
+    gpsOn() {
+        if (SENSORS.gps)
+            this.gps.StopLoop()
+    }
 
-        this.imu.on('euler', (data) => {
-            this.emit('euler', data)
-        })
+    gpsOff() {
+        if (SENSORS.gps)
+            this.gps.StopLoop()
+    }
+
+    imiOn() {
+        if (SENSORS.imu)
+            this.imu.startReading()
+    }
+
+    imuOff() {
+        if (SENSORS.imu)
+            this.imu.stopReading()
     }
 }
 

@@ -14,7 +14,7 @@
     "bno055": "0.0.1",
     "node-nan": "^1.0.2",
     "serialport": "^6.1.1",
-    "module-xbee": "^0.0.3"
+    "module-xbee": "^0.0.4"
   },
   "devDependencies": {
     "socket.io-client": "^2.0.4"

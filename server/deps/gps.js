@@ -16,7 +16,6 @@ class Gps extends EventEmitter {
       if (!this._on) {
         gps.Start(this.port)
         this._on = true
-        this.StartLoop()
       }
     } catch (e) {
       gps.Stop()
