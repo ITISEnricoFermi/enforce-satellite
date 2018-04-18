@@ -14,7 +14,9 @@
     "bno055": "0.0.1",
     "node-nan": "^1.0.2",
     "serialport": "^6.1.1",
-    "module-xbee": "^0.0.4"
+    "module-xbee": "^0.0.4",
+    "sqlite3": "^4.0.0",
+    "simple-node-logger": "^0.93.37"
   },
   "devDependencies": {
     "socket.io-client": "^2.0.4"

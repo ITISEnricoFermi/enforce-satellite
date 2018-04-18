@@ -1,5 +1,7 @@
 // const sensors = require('./deps/sensors')()
 // const db = require('database')
+const { DataBase } = require("./lib/database")
+const db = new DataBase("./database/enforce.db")
 const xbee = new (require("module-xbee").XBee)(process.env.XBEEPORT || "/dev/ttyS2", 115200)
 const comms = require('./lib/comms')(xbee)
 const imu = require("./deps/imu")()
@@ -33,10 +35,12 @@ comms.on("command", (commandString) => {
 
 sensors.on("gps", d => {
     comms.send("loc", d)
+    db.insertPos({latitude: d.latitude, longitude: d.longitude, altitude: d.altitude})
 })
 
 sensors.on("quaternion", d => {
     comms.send("ori", d)
+    db.insertOri({x: d.x, y: d.y, z: d.z, w:d.w, scale: 1})
 })
 
 
