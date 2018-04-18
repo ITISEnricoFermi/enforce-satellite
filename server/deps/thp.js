@@ -16,7 +16,6 @@ class THP extends EventEmitter {
     bme280.init()
       .then(() => {
         console.log('BME280 initialization succeeded');
-        this.startReading();
       })
       .catch((err) => console.error(`BME280 initialization failed: ${err} `));
   }
