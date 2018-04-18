@@ -1,0 +1,11 @@
+{
+  "nome": "enforce.db",
+  "TABLES_NAMES": {
+    "mission": "missioni",
+    "temp": "temperature",
+    "pres": "pressioni",
+    "umid": "umidita",
+    "gps": "position",
+    "gyro": "orientation"
+  }
+}
