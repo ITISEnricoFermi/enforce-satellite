@@ -7,7 +7,8 @@ class IMU extends EventEmitter {
         this.enabled = false
         this.running = false
         this.imu = new BNO055({device: i2cDev || '/dev/i2c-0'})
-        this.imu.beginNDOF(() => {
+        this.imu.beginNDOF((err, ok) => {
+            if (err) return console.error("IMU error: ", err)
             this.enabled = true
             console.log('imu enabled')
         })
