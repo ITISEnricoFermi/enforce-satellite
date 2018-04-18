@@ -8,13 +8,11 @@ const options = {
   i2cAddress: BME280.BME280_DEFAULT_I2C_ADDRESS()
 };
 
-const bme280 = new BME280(options);
-
 class THP extends EventEmitter {
   constructor() {
     super()
-    this._on = false
-    bme280.init()
+    this.bme280 = new BME280(options);
+    this.bme280.init()
       .then(() => {
         console.log('BME280 initialization succeeded');
         this.startReading();
@@ -23,16 +21,17 @@ class THP extends EventEmitter {
   }
 
   readSensorData() {
-    bme280.readSensorData()
+    let self = this
+    this.bme280.readSensorData()
       .then((data) => {
-        this.emit("data", data)
+        self.emit("data", data)
         this.to = setTimeout(this.readSensorData, 0);
       })
       .catch((err) => {
         console.log(`BME280 read error: ${err}`);
         this.to = setTimeout(this.readSensorData, 0);
       });
-  };
+  }
 
   startReading() {
     this.readSensorData()
@@ -42,3 +41,5 @@ class THP extends EventEmitter {
     clearTimeout(this.to)
   }
 }
+
+module.exports = () => new THP()
