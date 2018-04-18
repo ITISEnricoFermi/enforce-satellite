@@ -8,6 +8,7 @@ class Gps extends EventEmitter {
     super()
     this.port = port
     this._on = false
+    this.running = false
     this.Start()
   }
 
@@ -24,14 +25,17 @@ class Gps extends EventEmitter {
   }
 
   StartLoop() {
-    this.loop = setTimeout(() => {
-      this.emit("data", gps.GetData())
-      this.StartLoop()
-    } , 0)
+    if (this.on && !this.running) {
+      this.loop = setTimeout(() => {
+        this.emit("data", gps.GetData())
+        this.StartLoop()
+      }, 0)
+    }
   }
 
   StopLoop() {
-    clearTimeout(this.loop)
+    if (this._on && this.running)
+      clearTimeout(this.loop)
   }
 
   /**

@@ -5,6 +5,7 @@ class IMU extends EventEmitter {
     constructor(i2cDev) {
         super()
         this.enabled = false
+        this.running = false
         this.imu = new BNO055({device: i2cDev || '/dev/i2c-0'})
         this.imu.beginNDOF(() => {
             this.enabled = true
@@ -29,13 +30,19 @@ class IMU extends EventEmitter {
     }
 
     startReading() {
-        this.checkQuaternion()
-        this.checkEuler()
+        if (this.enabled && !this.running) {
+            this.checkQuaternion()
+            this.checkEuler()
+            this.running = true
+        }
     }
 
     stopReading() {
-        clearTimeout(this.quaternionChecker)
-        clearTimeout(this.eulerChecker)
+        if (this.enabled && this.running) {
+            clearTimeout(this.quaternionChecker)
+            clearTimeout(this.eulerChecker)
+            this.running = false
+        }
     }
 }
 
