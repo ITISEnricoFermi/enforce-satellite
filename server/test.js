@@ -6,7 +6,10 @@
 const xbee = require("./mock/XBee")()
 const comms = require("./lib/comms")(xbee)
 
-xbee.sendData("jajsajkfdhas")
+comms.send("loc", {test: 0342})
+
+comms.on("")
+
 // sensors.on('quaternion', (data) => {
 //     targeter.setCurrentOrientation(data.z)
 // })
