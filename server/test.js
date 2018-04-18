@@ -4,7 +4,7 @@
 //const pilot = require('./lib/pilot')(motors)
 //const targeter = require('./lib/targeter')()
 //const xbee = require("./mock/XBee")()
-const xbee = new (require("./deps/XBee").XBee)("/dev/ttyS1", 115200)
+const xbee = new (require("./deps/XBee").XBee)("/dev/ttyS2", 115200)
 const comms = require("./lib/comms")(xbee)
 
 const line = require("readline").createInterface({
