@@ -27,6 +27,10 @@ class Targeter {
         this.currentOrientation = angle
     }
 
+    getTargetOrientation() {
+        //TODO: calculate orientation based on coordinates
+    }
+
     getTargetOrientationDelta() {
         const delta = ((d1, d2) => {return Math.abs(d1) < Math.abs(d2) ? d1 : -d2})
             (this.targetOrientation - this.currentOrientation,
