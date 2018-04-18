@@ -2,10 +2,10 @@ const { EventEmitter } = require('events')
 const BNO055 = require('bno055')
 
 class IMU extends EventEmitter {
-    constructor() {
+    constructor(i2cDev) {
         super()
         this.enabled = false
-        this.imu = new BNO055({device: '/dev/i2c-0'})
+        this.imu = new BNO055({device: i2cDev || '/dev/i2c-0'})
         this.imu.beginNDOF(() => {
             this.enabled = true
             console.log('imu enabled')
@@ -39,4 +39,4 @@ class IMU extends EventEmitter {
     }
 }
 
-module.exports = new IMU()
+module.exports = (i2cDev) => new IMU(i2cDev)
