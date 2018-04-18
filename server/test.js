@@ -1,11 +1,10 @@
 const xbee = new (require("module-xbee").XBee)(process.env.XBEEPORT || "/dev/ttyS2", 115200)
 //const imu = require('./deps/imu')()
-const gps = require("node-nan")
 //const motors = require('./deps/motors')()
 //const pilot = require('./lib/pilot')(motors)
 //const targeter = require('./lib/targeter')()
-gps.Start("/dev/ttyS1")
 //const sensorIMU = require('./lib/sensors')({imu})
+const gps = require("./deps/gps")("/dev/ttyS1")
 const comms = require("./lib/comms")(xbee)
 
 comms.onE("data", d => {
@@ -16,11 +15,9 @@ sensors.on('quaternion', (data) => {
   comms.send("ori", data)
 })
 
-setTimeout(() => {
-  gps.GetData((err, data) => {
-    console.log(data)
-  })
-}, 1000)
+gps.on("data", d => {
+  comms.send("loc", d)
+})
 // pilot.enableAutopilot(targeter)
 
 
