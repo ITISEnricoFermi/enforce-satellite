@@ -2,13 +2,13 @@
 // const db = require('database')
 const xbee = new (require("module-xbee").XBee)(process.env.XBEEPORT || "/dev/ttyS2", 115200)
 const comms = require('./lib/comms')(xbee)
-const imu = require("./deps/imu")()
+//const imu = require("./deps/imu")()
 const thp = require("./deps/thp")
-const gps = require("./deps/gps")("/dev/ttyS1")
+//const gps = require("./deps/gps")("/dev/ttyS1")
 // const motors = require('./mock/motors.mock')
 // const targeter = require('./lib/targeter')
 // const pilot = require('./lib/pilot')(motors)
-const sensors = require('./lib/sensors')({gps, imu, thp})
+const sensors = require('./lib/sensors')({thp})
 
 let config = {
     record: false,
@@ -32,16 +32,16 @@ comms.on("command", (commandString) => {
     }
 })
 
-sensors.on("gps", d => {
-    comms.send("loc", d)
-})
+// sensors.on("gps", d => {
+//     comms.send("loc", d)
+// })
 
 sensors.on("temp", t => {
     comms.send("tmp", t)
 })
 
-sensors.on("quaternion", d => {
-    comms.send("ori", d)
-})
+// sensors.on("quaternion", d => {
+//     comms.send("ori", d)
+// })
 
 
