@@ -24,7 +24,7 @@ class Gps extends EventEmitter {
   }
 
   StartLoop() {
-    this.loop = setTimeout(() => this.emit("data", gps.GetData()) ), 0)
+    this.loop = setTimeout(() => this.emit("data", gps.GetData()) , 0)
   }
 
   StopLoop() {
