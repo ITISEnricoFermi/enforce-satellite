@@ -11,9 +11,9 @@ comms.onE("data", d => {
   console.log(d)
 })
 
-sensors.on('quaternion', (data) => {
-  comms.send("ori", data)
-})
+// sensors.on('quaternion', (data) => {
+//   comms.send("ori", data)
+// })
 
 gps.on("data", d => {
   comms.send("loc", d)
