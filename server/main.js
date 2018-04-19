@@ -9,7 +9,8 @@ const thp = new THP()
 // const motors = require('./mock/motors.mock')
 // const targeter = require('./lib/targeter')
 // const pilot = require('./lib/pilot')(motors)
-const sensors = require('./lib/sensors')({thp})
+const SENSORS = require('./lib/sensors')
+const sensors =new SENSORS({thp})
 
 let config = {
     record: false,
