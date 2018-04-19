@@ -1,5 +1,5 @@
 const { EventEmitter } = require('events')
-const BNO055 = require('bno055')
+const BNO055 = require('./BNO055')
 
 class IMU extends EventEmitter {
     constructor(i2cDev) {
