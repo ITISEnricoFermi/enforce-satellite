@@ -11,4 +11,4 @@ class Sensors extends EventEmitter {
     }
 }
 
-module.exports = new Sensors()
+module.exports = Sensors

@@ -47,4 +47,4 @@ class IMU extends EventEmitter {
     }
 }
 
-module.exports = (i2cDev) => new IMU(i2cDev)
+module.exports = IMU

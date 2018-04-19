@@ -3,7 +3,7 @@ const {
 } = require("events")
 const gps = require("node-nan")
 
-class Gps extends EventEmitter {
+class GPS extends EventEmitter {
   constructor(port) {
     super()
     this.port = port
@@ -58,7 +58,7 @@ class Gps extends EventEmitter {
 /**
  * @param {string} port 
  */
-module.exports = (port) => new Gps(port)
+module.exports = GPS
 
 /**
  * @typedef {{ latitude: number, longitude: number, altitude:number, speed: number, course: number }} PositionData

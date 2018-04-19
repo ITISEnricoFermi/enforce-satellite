@@ -70,4 +70,4 @@ class XBeeMock extends EventEmitter {
   }
 }
 
-module.exports = () => new XBeeMock()
+module.exports = XBeeMock

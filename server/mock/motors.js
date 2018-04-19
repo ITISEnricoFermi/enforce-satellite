@@ -16,4 +16,4 @@ class MotorsController {
     }
 }
 
-module.exports = new MotorsController()
+module.exports = MotorsController

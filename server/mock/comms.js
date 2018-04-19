@@ -21,4 +21,4 @@ class Comms {
     }
 }
 
-module.exports = new Comms()
+module.exports = Comms

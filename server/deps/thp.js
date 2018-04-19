@@ -42,4 +42,4 @@ class THP extends EventEmitter {
   }
 }
 
-module.exports = () => new THP()
+module.exports = THP

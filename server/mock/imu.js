@@ -46,4 +46,4 @@ class IMU extends EventEmitter {
     }
 }
 
-module.exports = new IMU()
+module.exports = IMU
