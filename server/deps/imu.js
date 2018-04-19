@@ -6,12 +6,14 @@ const BNO055 = require('./BNO055')
 class IMU extends EventEmitter {
     constructor(i2cDev) {
         super()
+        this._on = false
         this.imu = new BNO055({
             device: i2cDev || '/dev/i2c-0'
         })
         this.imu.beginNDOF((err, ok) => {
             if (err) return console.error("IMU error: ", err)
-            this.enabled = true
+            this._on = true
+            this.startReading()
             console.log('imu enabled')
         })
     }
@@ -33,15 +35,19 @@ class IMU extends EventEmitter {
     }
 
     startReading() {
-        this.checkQuaternion()
-        this.checkEuler()
-        this.running = true
+        if (this._on && !this.running) {
+            this.checkQuaternion()
+            this.checkEuler()
+            this.running = true
+        }
     }
 
     stopReading() {
-        clearTimeout(this.quaternionChecker)
-        clearTimeout(this.eulerChecker)
-
+        if (this._on && this.running) {
+            clearTimeout(this.quaternionChecker)
+            clearTimeout(this.eulerChecker)
+            this.running = false
+        }
     }
 }
 

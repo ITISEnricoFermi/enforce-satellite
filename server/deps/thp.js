@@ -14,12 +14,12 @@ class THP extends EventEmitter {
       i2cAddress: BME280.BME280_DEFAULT_I2C_ADDRESS()
     }
     this.bme280 = new BME280(options);
-    this.bme280.init(() => {
+    this.bme280.init((err) => {
       if (err) return console.error(`BME280 initialization failed: ${err} `)
       console.log('BME280 initialization succeeded');
       this._on = true
+      this.readSensorData()
     })
-    console.log(this._on)
   }
 
   readSensorData() {
