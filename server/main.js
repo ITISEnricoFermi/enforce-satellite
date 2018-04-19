@@ -42,6 +42,13 @@ sensors.on("temp", t => {
     comms.send("tmp", t)
 })
 
+sensors.on("humidity", h => {
+    comms.send("umd", h)  
+})
+
+sensors.on("pressure", h => {
+    comms.send("pre", h)  
+})
 // sensors.on("quaternion", d => {
 //     comms.send("ori", d)
 // })

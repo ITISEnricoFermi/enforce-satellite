@@ -40,6 +40,12 @@ class Sensors extends EventEmitter {
             this.thp.on("data", d => {
                 this.emit("temp", d.temperature_C)
             })
+            this.thp.on("data", d => {
+                this.emit("humidity", d.humidity)
+            })
+            this.thp.on("data", d => {
+                this.emit("pressure", d.pressure_hPa)
+            })
         }
     }
 
