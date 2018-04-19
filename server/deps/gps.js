@@ -30,11 +30,15 @@ class GPS extends EventEmitter {
   StartLoop() {
     if (this._on && !this.running) {
       this.running = true
-      this.loop = setTimeout(() => {
-        this.emit("data", gps.GetData())
-        this.StartLoop()
-      }, this.delay)
+      this.run()
     }
+  }
+
+  run() {
+    this.loop = setTimeout(() => {
+      this.emit("data", gps.GetData())
+      this.StartLoop()
+    }, this.delay)
   }
 
   StopLoop() {
