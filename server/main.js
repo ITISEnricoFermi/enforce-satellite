@@ -1,6 +1,7 @@
 // const sensors = require('./deps/sensors')()
 const xbee = new (require("module-xbee").XBee)(process.env.XBEEPORT || "/dev/ttyS2", 115200)
-const comms = require('./lib/comms')(xbee)
+const COMMS = require('./lib/comms')
+const comms = new COMMS(xbee)
 //const imu = require("./deps/imu")()
 const THP = require("./deps/thp")
 const thp = new THP()
