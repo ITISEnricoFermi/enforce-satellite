@@ -6,16 +6,16 @@ class Targeter {
             x: 0,
             y: 0
         }
-
+        
         this.currentOrientation = 0
         this.deadzone = 10
     }
 
-    setCurrentPosition(position) {
+    setPosition(position) {
         this.currentPosition = position
     }
 
-    setCurrentOrientation(angle) {
+    setOrientation(angle) {
         this.currentOrientation = angle
     }
 
@@ -28,20 +28,17 @@ class Targeter {
             x: this.target.x - this.currentPosition.x,
             y: this.target.y - this.currentPosition.y
         }
-        return this.getAngleFromVector(temp)
+        return this.getAngleToVector(temp)
     }
 
-    getAngleFromVector(vec) {
-        return Math.atan2(vec.x, vec.y) / Math.PI * 180
+    getAngleToVector(vec) {
+        return Math.atan2(vec.y, vec.x)
     }
 
     getTargetDirectionDelta() {
-        const delta = ((d1, d2) => {return Math.abs(d1) < Math.abs(d2) ? d1 : -d2})
+        return ((d1, d2) => {return Math.abs(d1) < Math.abs(d2) ? d1 : -d2})
             (this.getTargetDirection() - this.currentOrientation,
             -this.getTargetDirection() + this.currentOrientation - 360)
-        
-        if (Math.abs(delta) < 10) return 0
-        else return delta
     }
 
     getTurnDirection() {
