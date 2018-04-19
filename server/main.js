@@ -1,5 +1,5 @@
 // const sensors = require('./deps/sensors')()
-const xbee = new (require("module-xbee").XBee)(process.env.XBEEPORT || "/dev/ttyS1", 115200)
+const xbee = new(require("module-xbee").XBee)(process.env.XBEEPORT || "/dev/ttyS1", 115200)
 const COMMS = require('./lib/comms')
 const comms = new COMMS(xbee)
 const IMU = require("./deps/imu")
@@ -12,7 +12,11 @@ const gps = new GPS("/dev/ttyS2", 500)
 // const targeter = require('./lib/targeter')
 // const pilot = require('./lib/pilot')(motors)
 const SENSORS = require('./lib/sensors')
-const sensors =new SENSORS({thp, imu, gps})
+const sensors = new SENSORS({
+    thp,
+    imu,
+    gps
+})
 
 let config = {
     record: false,
@@ -26,13 +30,34 @@ comms.on("command", (commandString) => {
         case 'm':
             let motorState
 
-			if (commandString[2] === '0') motorState = true
-			if (commandString[2] === '1') motorState = false
+            if (commandString[2] === '0') motorState = true
+            if (commandString[2] === '1') motorState = false
 
-			if (commandString[1] === 'r') motors.setRight(motorState)
-			if (commandString[1] === 'l') motors.setLeft(motorState)
+            if (commandString[1] === 'r') motors.setRight(motorState)
+            if (commandString[1] === 'l') motors.setLeft(motorState)
 
-		break;
+            break;
+
+        case 'g':
+            if (sensors.SENSORS.gps) {
+                if (commandString[1] === '0') sensors.gpsOff()
+                if (commandString[1] === '1') sensors.gpsOn()
+            }
+            break;
+        case 'c':
+            break;
+        case 'i':
+            if (sensors.SENSORS.imu) {
+                if (commandString[1] === '0') sensors.imuOff()
+                if (commandString[1] === '1') sensors.imiOn()
+            }
+            break;
+        case 'b':
+            if (sensors.SENSORS.thp) {
+                if (commandString[1] === '0') sensors.thpOff()
+                if (commandString[1] === '1') sensors.thpOn()
+            }
+        break;
     }
 })
 
@@ -49,11 +74,11 @@ sensors.on("temp", d => {
 })
 
 sensors.on("humidity", d => {
-    comms.send("umd", d)  
+    comms.send("umd", d)
 })
 
 sensors.on("pressure", d => {
-    comms.send("pre", d)  
+    comms.send("pre", d)
 })
 
 sensors.on("location", d => {
@@ -64,5 +89,3 @@ sensors.on("location", d => {
 // sensors.on("quaternion", d => {
 //     comms.send("ori", d)
 // })
-
-
