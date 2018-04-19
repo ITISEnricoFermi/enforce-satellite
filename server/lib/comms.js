@@ -59,7 +59,7 @@ class Comms extends EventEmitter {
 
 }
 
-module.exports = (xbee) => new Comms(xbee)
+module.exports = Comms
 
 /**
  * @typedef {"loc" | "umd" | "tmp" | "pre" | "ori"} DataType

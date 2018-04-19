@@ -62,4 +62,4 @@ class Pilot {
     }
 }
 
-module.exports = (m) => new Pilot(m)
+module.exports = Pilot

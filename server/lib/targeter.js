@@ -19,6 +19,10 @@ class Targeter {
         this.currentOrientation = angle
     }
 
+    setTarget(target) {
+        this.target = target
+    }
+
     getTargetDirection() {
         const temp = {
             x: this.target.x - this.currentPosition.x,
@@ -47,4 +51,4 @@ class Targeter {
     }
 }
 
-module.exports = (target) => new Targeter(target)
+module.exports = Targeter
