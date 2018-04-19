@@ -1,22 +1,24 @@
-// const sensors = require('./deps/sensors')()
-const xbee = new(require("module-xbee").XBee)(process.env.XBEEPORT || "/dev/ttyS1", 115200)
+const XBee = require("module-xbee").XBee
 const COMMS = require('./lib/comms')
-const comms = new COMMS(xbee)
 const IMU = require("./deps/imu")
-const imu = new IMU(null, 500)
 const THP = require("./deps/thp")
-const thp = new THP(500)
 const GPS = require("./deps/gps")
-const gps = new GPS("/dev/ttyS2", 500)
-// const motors = require('./mock/motors.mock')
-// const targeter = require('./lib/targeter')
-// const pilot = require('./lib/pilot')(motors)
 const SENSORS = require('./lib/sensors')
+
+const xbee = new XBee(process.env.XBEEPORT || "/dev/ttyS1", 115200)
+const gps = new GPS("/dev/ttyS2", 500)
+const comms = new COMMS(xbee)
+const thp = new THP(500)
+const imu = new IMU(null, 500)
 const sensors = new SENSORS({
     thp,
     imu,
     gps
 })
+
+// const motors = require('./mock/motors.mock')
+// const targeter = require('./lib/targeter')
+// const pilot = require('./lib/pilot')(motors)
 
 let config = {
     record: false,
@@ -57,7 +59,7 @@ comms.on("command", (commandString) => {
                 if (commandString[1] === '0') sensors.thpOff()
                 if (commandString[1] === '1') sensors.thpOn()
             }
-        break;
+            break;
     }
 })
 
