@@ -8,7 +8,7 @@ class Targeter {
         }
         
         this.currentOrientation = 0
-        this.deadzone = 10
+        this.deadzone = 0.1 * Math.PI
     }
 
     setPosition(position) {
@@ -28,6 +28,7 @@ class Targeter {
             x: this.target.x - this.currentPosition.x,
             y: this.target.y - this.currentPosition.y
         }
+        console.log(temp)
         return this.getAngleToVector(temp)
     }
 
