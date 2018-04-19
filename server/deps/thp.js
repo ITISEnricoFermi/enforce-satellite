@@ -7,8 +7,6 @@ const {
 class THP extends EventEmitter {
   constructor() {
     super()
-    this._on = false
-    this.runnig = false
     const options = {
       i2cBusNo: 0,
       i2cAddress: BME280.BME280_DEFAULT_I2C_ADDRESS()
@@ -32,13 +30,11 @@ class THP extends EventEmitter {
   }
 
   startReading() {
-    if (this._on && !this.runnig)
-      this.readSensorData()
+    this.readSensorData()
   }
 
   stopReading() {
-    if (this._on && this.runnig)
-      clearTimeout(this.to)
+    clearTimeout(this.to)
   }
 }
 

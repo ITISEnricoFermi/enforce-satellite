@@ -1,12 +1,14 @@
-const { EventEmitter } = require('events')
+const {
+    EventEmitter
+} = require('events')
 const BNO055 = require('./BNO055')
 
 class IMU extends EventEmitter {
     constructor(i2cDev) {
         super()
-        this.enabled = false
-        this.running = false
-        this.imu = new BNO055({device: i2cDev || '/dev/i2c-0'})
+        this.imu = new BNO055({
+            device: i2cDev || '/dev/i2c-0'
+        })
         this.imu.beginNDOF((err, ok) => {
             if (err) return console.error("IMU error: ", err)
             this.enabled = true
@@ -31,19 +33,15 @@ class IMU extends EventEmitter {
     }
 
     startReading() {
-        if (this.enabled && !this.running) {
-            this.checkQuaternion()
-            this.checkEuler()
-            this.running = true
-        }
+        this.checkQuaternion()
+        this.checkEuler()
+        this.running = true
     }
 
     stopReading() {
-        if (this.enabled && this.running) {
-            clearTimeout(this.quaternionChecker)
-            clearTimeout(this.eulerChecker)
-            this.running = false
-        }
+        clearTimeout(this.quaternionChecker)
+        clearTimeout(this.eulerChecker)
+
     }
 }
 
