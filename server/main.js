@@ -57,6 +57,7 @@ sensors.on("pressure", d => {
 })
 
 sensors.on("location", d => {
+    delete d.course
     comms.send("loc", d)
 })
 
