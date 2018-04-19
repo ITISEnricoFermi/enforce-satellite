@@ -4,9 +4,10 @@ const {
 const gps = require("node-nan")
 
 class GPS extends EventEmitter {
-  constructor(port) {
+  constructor(port, delay) {
     super()
     this.port = port
+    this.delay = (delay && !isNaN(delay)) ? delay : 0
     this._on = false
     this.running = false
     this.Start()
@@ -17,6 +18,8 @@ class GPS extends EventEmitter {
       if (!this._on) {
         gps.Start(this.port)
         this._on = true
+        console.log("GPS enabled")
+        this.StartLoop()
       }
     } catch (e) {
       gps.Stop()
@@ -25,26 +28,24 @@ class GPS extends EventEmitter {
   }
 
   StartLoop() {
-    if (this.on && !this.running) {
-      this.loop = setTimeout(() => {
-        this.emit("data", gps.GetData())
-        this.StartLoop()
-      }, 0)
+    if (this._on && !this.running) {
+      this.running = true
+      this.run()
     }
   }
 
-  StopLoop() {
-    if (this._on && this.running)
-      clearTimeout(this.loop)
+  run() {
+    this.loop = setTimeout(() => {
+      this.emit("data", gps.GetData())
+      this.run()
+    }, this.delay)
   }
 
-  /**
-   * @returns {PositionData}
-   */
-  getData() {
-    let data = gps.GetData()
-    this.emit("data", data)
-    return data
+  StopLoop() {
+    if (this._on && this.running) {
+      clearTimeout(this.loop)
+      this.running = false
+    }
   }
 
   close() {

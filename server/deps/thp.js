@@ -5,20 +5,21 @@ const {
 
 
 class THP extends EventEmitter {
-  constructor() {
+  constructor(delay) {
     super()
+    this.delay = (delay && !isNaN(delay)) ? delay : 0
     this._on = false
-    this.runnig = false
     const options = {
       i2cBusNo: 0,
       i2cAddress: BME280.BME280_DEFAULT_I2C_ADDRESS()
     }
     this.bme280 = new BME280(options);
-    this.bme280.init().then(() => {
-        console.log('BME280 initialization succeeded');
-        this._on = true
-      })
-      .catch((err) => console.error(`BME280 initialization failed: ${err} `));
+    this.bme280.init((err) => {
+      if (err) return console.error(`BME280 initialization failed: ${err} `)
+      console.log('BME280 initialization succeeded');
+      this._on = true
+      this.readSensorData()
+    })
   }
 
   readSensorData() {
@@ -28,17 +29,15 @@ class THP extends EventEmitter {
         else this.emit("data", data)
         this.readSensorData()
       })
-    })
+    }, this.delay)
   }
 
   startReading() {
-    if (this._on && !this.runnig)
-      this.readSensorData()
+    this.readSensorData()
   }
 
   stopReading() {
-    if (this._on && this.runnig)
-      clearTimeout(this.to)
+    clearTimeout(this.to)
   }
 }
 

@@ -52,43 +52,41 @@ class BME280 {
     this.REGISTER_HUMIDITY_DATA = 0xFD;
   }
 
-  init() {
-    return new Promise((resolve, reject) => {
-      this.i2cBus.writeByte(this.i2cAddress, this.REGISTER_CHIPID, 0, (err) => {
+  init(cb) {
+    this.i2cBus.writeByte(this.i2cAddress, this.REGISTER_CHIPID, 0, (err) => {
+      if (err) {
+        return cb(err);
+      }
+      this.i2cBus.readByte(this.i2cAddress, this.REGISTER_CHIPID, (err, chipId) => {
         if (err) {
-          return reject(err);
-        }
-        this.i2cBus.readByte(this.i2cAddress, this.REGISTER_CHIPID, (err, chipId) => {
-          if (err) {
-            return reject(err);
-          } else if (chipId !== BME280.CHIP_ID_BME280() &&
-            chipId !== BME280.CHIP_ID1_BMP280() &&
-            chipId !== BME280.CHIP_ID2_BMP280() &&
-            chipId !== BME280.CHIP_ID3_BMP280()) {
-            return reject(`Unexpected BMx280 chip ID: 0x${chipId.toString(16)}`);
-          } else {
-            console.log(`Found BMx280 chip ID 0x${chipId.toString(16)} on bus i2c-${this.i2cBusNo}, address 0x${this.i2cAddress.toString(16)}`);
-            this.loadCalibration((err) => {
+          return cb(err);
+        } else if (chipId !== BME280.CHIP_ID_BME280() &&
+          chipId !== BME280.CHIP_ID1_BMP280() &&
+          chipId !== BME280.CHIP_ID2_BMP280() &&
+          chipId !== BME280.CHIP_ID3_BMP280()) {
+          return cb(`Unexpected BMx280 chip ID: 0x${chipId.toString(16)}`);
+        } else {
+          console.log(`Found BMx280 chip ID 0x${chipId.toString(16)} on bus i2c-${this.i2cBusNo}, address 0x${this.i2cAddress.toString(16)}`);
+          this.loadCalibration((err) => {
+            if (err) {
+              return cb(err);
+            }
+
+            // Humidity 16x oversampling
+            //
+            this.i2cBus.writeByte(this.i2cAddress, this.REGISTER_CONTROL_HUM, 0b00000101, (err) => {
               if (err) {
-                return reject(err);
+                return cb(err);
               }
 
-              // Humidity 16x oversampling
+              // Temperture/pressure 16x oversampling, normal mode
               //
-              this.i2cBus.writeByte(this.i2cAddress, this.REGISTER_CONTROL_HUM, 0b00000101, (err) => {
-                if (err) {
-                  return reject(err);
-                }
-
-                // Temperture/pressure 16x oversampling, normal mode
-                //
-                this.i2cBus.writeByte(this.i2cAddress, this.REGISTER_CONTROL, 0b10110111, (err) => {
-                  return err ? reject(err) : resolve(chipId);
-                });
+              this.i2cBus.writeByte(this.i2cAddress, this.REGISTER_CONTROL, 0b10110111, (err) => {
+                return err ? cb(err) : cb(null, chipId);
               });
             });
-          }
-        });
+          });
+        }
       });
     });
   }

@@ -1,15 +1,21 @@
-const { EventEmitter } = require('events')
+const {
+    EventEmitter
+} = require('events')
 const BNO055 = require('./BNO055')
 
 class IMU extends EventEmitter {
-    constructor(i2cDev) {
+    constructor(i2cDev, delay) {
         super()
-        this.enabled = false
+        this.delay = (delay && !isNaN(delay)) ? delay : 0
+        this._on = false
         this.running = false
-        this.imu = new BNO055({device: i2cDev || '/dev/i2c-0'})
+        this.imu = new BNO055({
+            device: i2cDev || '/dev/i2c-0'
+        })
         this.imu.beginNDOF((err, ok) => {
             if (err) return console.error("IMU error: ", err)
-            this.enabled = true
+            this._on = true
+            this.startReading()
             console.log('imu enabled')
         })
     }
@@ -19,7 +25,7 @@ class IMU extends EventEmitter {
             this.imu.getQuaternion((error, data) => {
                 this.emit('quaternion', data)
                 this.checkQuaternion()
-            }), 0)
+            }), this.delay)
     }
 
     checkEuler() {
@@ -27,11 +33,11 @@ class IMU extends EventEmitter {
             this.imu.getEuler((error, data) => {
                 this.emit('euler', data)
                 this.checkEuler()
-            }), 0)
+            }), this.delay)
     }
 
     startReading() {
-        if (this.enabled && !this.running) {
+        if (this._on && !this.running) {
             this.checkQuaternion()
             this.checkEuler()
             this.running = true
@@ -39,7 +45,7 @@ class IMU extends EventEmitter {
     }
 
     stopReading() {
-        if (this.enabled && this.running) {
+        if (this._on && this.running) {
             clearTimeout(this.quaternionChecker)
             clearTimeout(this.eulerChecker)
             this.running = false
