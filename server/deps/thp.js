@@ -5,8 +5,9 @@ const {
 
 
 class THP extends EventEmitter {
-  constructor() {
+  constructor(delay) {
     super()
+    this.delay = (delay && !isNaN(delay)) ? delay : 0
     this._on = false
     const options = {
       i2cBusNo: 0,
@@ -28,7 +29,7 @@ class THP extends EventEmitter {
         else this.emit("data", data)
         this.readSensorData()
       })
-    })
+    }, this.delay)
   }
 
   startReading() {
