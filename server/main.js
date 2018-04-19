@@ -6,12 +6,13 @@ const IMU = require("./deps/imu")
 const imu = new IMU(null, 0)
 const THP = require("./deps/thp")
 const thp = new THP(500)
-//const gps = require("./deps/gps")("/dev/ttyS1")
+const GPS = require("./deps/gps")
+const gps = new GPS("/dev/ttyS2")
 // const motors = require('./mock/motors.mock')
 // const targeter = require('./lib/targeter')
 // const pilot = require('./lib/pilot')(motors)
 const SENSORS = require('./lib/sensors')
-const sensors =new SENSORS({thp, imu})
+const sensors =new SENSORS({thp, imu, gps})
 
 let config = {
     record: false,
@@ -53,6 +54,10 @@ sensors.on("humidity", d => {
 
 sensors.on("pressure", d => {
     comms.send("pre", d)  
+})
+
+sensors.on("location", d => {
+    comms.send("loc", d)
 })
 
 // sensors.on("quaternion", d => {

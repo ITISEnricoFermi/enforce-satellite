@@ -29,7 +29,7 @@ class Sensors extends EventEmitter {
         }
         if (SENSORS.gps) {
             this.gps = sensors.gps
-            this.gps.on("data", d => this.emit("gps", d))
+            this.gps.on("data", d => this.emit("location", d))
         }
 
         if (SENSORS.thp) {
