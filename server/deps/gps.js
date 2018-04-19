@@ -44,15 +44,6 @@ class GPS extends EventEmitter {
     }
   }
 
-  /**
-   * @returns {PositionData}
-   */
-  getData() {
-    let data = gps.GetData()
-    this.emit("data", data)
-    return data
-  }
-
   close() {
     if (this._on) {
       this._on = false
