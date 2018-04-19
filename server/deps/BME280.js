@@ -82,7 +82,7 @@ class BME280 {
               // Temperture/pressure 16x oversampling, normal mode
               //
               this.i2cBus.writeByte(this.i2cAddress, this.REGISTER_CONTROL, 0b10110111, (err) => {
-                return err ? cb(err) : cb(chipId);
+                return err ? cb(err) : cb(null, chipId);
               });
             });
           });
