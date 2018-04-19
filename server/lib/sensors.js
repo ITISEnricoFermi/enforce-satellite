@@ -20,7 +20,6 @@ class Sensors extends EventEmitter {
 
         if (SENSORS.imu) {
             this.imu = sensors.imu
-            this.imu.startReading()
             this.imu.on('quaternion', (data) => {
                 this.emit('quaternion', data)
             })
@@ -30,13 +29,11 @@ class Sensors extends EventEmitter {
         }
         if (SENSORS.gps) {
             this.gps = sensors.gps
-            this.gps.StartLoop()
             this.gps.on("data", d => this.emit("gps", d))
         }
 
         if (SENSORS.thp) {
             this.thp = sensors.thp
-            this.thp.startReading()
             this.thp.on("data", d => {
                 this.emit("temp", d.temperature_C)
             })
