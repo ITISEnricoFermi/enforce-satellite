@@ -57,7 +57,6 @@ sensors.on("pressure", d => {
 })
 
 sensors.on("location", d => {
-    console.log(d)
     comms.send("loc", d)
 })
 
