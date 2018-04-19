@@ -7,6 +7,7 @@ const {
 class THP extends EventEmitter {
   constructor() {
     super()
+    this._on = false
     const options = {
       i2cBusNo: 0,
       i2cAddress: BME280.BME280_DEFAULT_I2C_ADDRESS()
@@ -17,6 +18,7 @@ class THP extends EventEmitter {
         this._on = true
       })
       .catch((err) => console.error(`BME280 initialization failed: ${err} `));
+      console.log(this._on)
   }
 
   readSensorData() {
