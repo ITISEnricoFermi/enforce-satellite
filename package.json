@@ -11,12 +11,14 @@
   "author": "Ernesto Montada Romero",
   "license": "MIT",
   "dependencies": {
+    "async": "^1.4.2",
     "bno055": "0.0.1",
-    "node-nan": "^1.0.2",
-    "serialport": "^6.1.1",
-    "module-xbee": "^0.0.4",
+    "chai": "^4.1.2",
     "i2c-bus": "^1.2.0",
-    "async": "^1.4.2"
+    "mocha": "^5.1.1",
+    "module-xbee": "^0.0.4",
+    "node-nan": "^1.0.2",
+    "serialport": "^6.1.1"
   },
   "devDependencies": {
     "socket.io-client": "^2.0.4"
