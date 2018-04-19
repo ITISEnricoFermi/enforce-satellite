@@ -18,6 +18,7 @@ class GPS extends EventEmitter {
       if (!this._on) {
         gps.Start(this.port)
         this._on = true
+        console.log("GPS enabled")
         this.StartLoop()
       }
     } catch (e) {
