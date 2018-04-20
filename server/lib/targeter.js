@@ -1,5 +1,9 @@
-class Targeter {
+const EventEmitter = require('events')
+
+class Targeter extends EventEmitter {
     constructor(target) {
+        super()
+
         this.target = target
 
         this.currentPosition = {
@@ -28,7 +32,6 @@ class Targeter {
             x: this.target.x - this.currentPosition.x,
             y: this.target.y - this.currentPosition.y
         }
-        console.log(temp)
         return this.getAngleToVector(temp)
     }
 
@@ -37,9 +40,22 @@ class Targeter {
     }
 
     getTargetDirectionDelta() {
-        return ((d1, d2) => {return Math.abs(d1) < Math.abs(d2) ? d1 : -d2})
-            (this.getTargetDirection() - this.currentOrientation,
-            -this.getTargetDirection() + this.currentOrientation - 360)
+        const delta = ((d1, d2) => {return Math.abs(d1) < Math.abs(d2) ? d1 : -d2})
+        (this.getTargetDirection() - this.currentOrientation,
+        -this.getTargetDirection() + this.currentOrientation - 360)
+
+        this.emit('target', {
+            angle: delta,
+            distance: this.getTargetDistance()
+        })
+
+        return delta
+    }
+
+    getTargetDistance() {
+        return Math.sqrt(
+            Math.pow(Math.abs(this.target.x - this.currentPosition.x), 2) +
+            Math.pow(Math.abs(this.target.y - this.currentPosition.y), 2))
     }
 
     getTurnDirection() {
