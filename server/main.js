@@ -4,9 +4,9 @@ const IMU = require("./deps/imu")
 const THP = require("./deps/thp")
 const GPS = require("./deps/gps")
 const SENSORS = require('./lib/sensors')
-const Database = require("./database/database")
+// const Database = require("./database/database")
 
-const db = new Database("./enforce.db")
+// const db = new Database("./enforce.db")
 const xbee = new XBee(process.env.XBEEPORT || "/dev/ttyS2", 115200)
 const gps = new GPS("/dev/ttyS1")
 const comms = new COMMS(xbee)
@@ -67,17 +67,17 @@ comms.on("command", (commandString) => {
 
 sensors.on("quaternion", d => {
     comms.send("ori", d)
-    db.insertOri({ x: d.x, y: d.y, z: d.z, w: d.w, scale: 1 })
+    // db.insertOri({ x: d.x, y: d.y, z: d.z, w: d.w, scale: 1 })
 })
 
 sensors.on("temp", d => {
     comms.send("tmp", d)
-    db.insertTemp(d)
+    // db.insertTemp(d)
 })
 
 sensors.on("humidity", d => {
     comms.send("umd", d)
-    db.insertUmid(d)
+    // db.insertUmid(d)
 })
 
 sensors.on("pressure", d => {
@@ -87,7 +87,7 @@ sensors.on("pressure", d => {
 sensors.on("location", d => {
     delete d.course
     comms.send("loc", d)
-    db.insertPos({latitude: d.latitude, longitude: d.longitude, altitude: d.altitude})
+    // db.insertPos({latitude: d.latitude, longitude: d.longitude, altitude: d.altitude})
 })
 
 // sensors.on("quaternion", d => {
