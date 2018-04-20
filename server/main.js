@@ -8,7 +8,10 @@ const STORAGE = require("./storage/StorageClass")
 const ARCHIVER = require("./lib/archiver")
 const TARGETER = require("./lib/targeter")
 
-const target = new TARGETER({x: 0, y: 0})
+const target = new TARGETER({
+    x: 0,
+    y: 0
+})
 const storage = new STORAGE()
 const archiver = new ARCHIVER(storage)
 const xbee = new XBee(process.env.XBEEPORT || "/dev/ttyS2", 115200)
@@ -68,6 +71,9 @@ comms.on("command", (commandString) => {
                 if (commandString[1] === '1') sensors.thpOn()
             }
             break;
+        case 'status':
+            comms.send("status", sensors.status())
+            break;
     }
 })
 
@@ -97,9 +103,17 @@ sensors.on("pressure", d => {
 
 sensors.on("location", d => {
     archiver.saveData("location", d)
-    target.setPosition({x: d.longitude,y: d.latitude})
+    target.setPosition({
+        x: d.longitude,
+        y: d.latitude
+    })
     delete d.course
     comms.send("loc", d)
 })
 
-setInterval(() => comms.send("target", {angle: 1.5, distance: 500}), 2000)
+setInterval(() => {
+    comms.send("target", {
+        angle: 1.5,
+        distance: 500
+    })
+}, 2000)

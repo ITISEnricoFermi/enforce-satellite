@@ -61,6 +61,9 @@ class Comms extends EventEmitter {
       case "target":
         this.xbee.sendTarget(data)
         break;
+      case "status":
+        this.xbee.sendStatus(data)
+        break;
       default:
         this.xbee.sendData(data)
         break;

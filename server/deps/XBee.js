@@ -1,15 +1,28 @@
 "use strict";
 var __extends = (this && this.__extends) || (function () {
     var extendStatics = Object.setPrototypeOf ||
-        ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-        function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+        ({
+                __proto__: []
+            }
+            instanceof Array && function (d, b) {
+                d.__proto__ = b;
+            }) ||
+        function (d, b) {
+            for (var p in b)
+                if (b.hasOwnProperty(p)) d[p] = b[p];
+        };
     return function (d, b) {
         extendStatics(d, b);
-        function __() { this.constructor = d; }
+
+        function __() {
+            this.constructor = d;
+        }
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
     };
 })();
-Object.defineProperty(exports, "__esModule", { value: true });
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
 var SerialPort = require("serialport");
 var events_1 = require("events");
 // TODO: add custom emitter and delimeter for every type of data addParser(delimeter, emitter-name
@@ -34,7 +47,8 @@ var DELIMETERS = {
     ori: "O{",
     umd: "U{",
     pre: "P{",
-    tar: "G{"
+    tar: "G{",
+    status: "W{"
 };
 /**
  * @description Delimeter for the ```gpsData()``` method
@@ -120,6 +134,8 @@ var XBee = /** @class */ (function (_super) {
             this.emit("humidity", string.split(DELIMETERS.umd)[1]);
         else if (string.indexOf(DELIMETERS.tar) !== -1)
             this.emit("target", string.split(DELIMETERS.tar)[1])
+        else if (string.indexOf(DELIMETERS.status) !== -1)
+            this.emit("status", string.split(DELIMETERS.status)[1])
         else
             this.emit("data", string);
     };
@@ -174,7 +190,7 @@ var XBee = /** @class */ (function (_super) {
             this.port.write("" + data + exports.DELIMETER);
     };
 
-    XBee.prototype.sendTarget = function(target) {
+    XBee.prototype.sendTarget = function (target) {
         this.sendData("" + DELIMETERS.tar + JSON.stringify(target))
     }
     /**
@@ -241,6 +257,10 @@ var XBee = /** @class */ (function (_super) {
      */
     XBee.prototype.sendTMP = function (data) {
         this.sendData("" + DELIMETERS.tmp + JSON.stringify(data));
+    };
+
+    XBee.prototype.sendStatus = function (data) {
+        this.sendData("" + DELIMETERS.status + JSON.stringify(data));
     };
     return XBee;
 }(events_1.EventEmitter));

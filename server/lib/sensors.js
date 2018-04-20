@@ -48,6 +48,10 @@ class Sensors extends EventEmitter {
         }
     }
 
+    status() {
+        return { gps: this.gps.running, imu: this.imu.running, thp: this.thp.running }
+    }
+
     gpsOn() {
         if (this.SENSORS.gps)
             this.gps.StopLoop()
