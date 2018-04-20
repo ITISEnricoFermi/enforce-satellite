@@ -2,8 +2,8 @@ const Gpio = require('onoff').Gpio
 
 class MotorsController {
     constructor() {
-        this.left = new Gpio(1, 'out')
-        this.right = new Gpio(2, 'out')
+        this.left = new Gpio(64, 'out')
+        this.right = new Gpio(11, 'out')
     }
 
     setRight(state) {

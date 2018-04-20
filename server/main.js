@@ -72,7 +72,6 @@ comms.on("command", (commandString) => {
             }
             break;
         case 's':
-            console.log("status command")
             comms.send("status", sensors.status())
             break;
     }
