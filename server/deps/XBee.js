@@ -119,7 +119,7 @@ var XBee = /** @class */ (function (_super) {
         else if (string.indexOf(DELIMETERS.umd) !== -1)
             this.emit("humidity", string.split(DELIMETERS.umd)[1]);
         else if (string.indexOf(DELIMETERS.tar) !== -1)
-            thi.emit("target", string.split(DELIMETERS.tar)[1])
+            this.emit("target", string.split(DELIMETERS.tar)[1])
         else
             this.emit("data", string);
     };
