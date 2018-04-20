@@ -1,35 +1,7 @@
-const xbee = new (require("module-xbee").XBee)(process.env.XBEEPORT || "/dev/ttyS2", 115200)
-//const imu = require('./deps/imu')()
-//const motors = require('./deps/motors')()
-//const pilot = require('./lib/pilot')(motors)
-//const targeter = require('./lib/targeter')()
-//const sensorIMU = require('./lib/sensors')({imu})
-const gps = require("./deps/gps")("/dev/ttyS1")
-const comms = require("./lib/comms")(xbee)
+const XBee = require('./mock/XBee')
+const Comms = require('./lib/comms')
 
-comms.onE("data", d => {
-  console.log(d)
-})
+const xbee = new XBee()
+const comms = new Comms()
 
-// sensors.on('quaternion', (data) => {
-//   comms.send("ori", data)
-// })
-
-gps.on("data", d => {
-  comms.send("loc", d)
-})
-// pilot.enableAutopilot(targeter)
-
-
-//setTimeout(() => imu.stopReading(), 5000)
-
-
-
-const line = require("readline").createInterface({
-  input: process.stdin,
-  output: process.stdout
-})
-
-line.on("line", line => {
-  comms.send(null ,line)
-})
+setInterval(comms.send('loc', {x: 'asd'}), 100)
