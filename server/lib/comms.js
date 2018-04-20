@@ -75,6 +75,6 @@ class Comms extends EventEmitter {
 module.exports = Comms
 
 /**
- * @typedef {"loc" | "umd" | "tmp" | "pre" | "ori" | "target"} DataType
+ * @typedef {"loc" | "umd" | "tmp" | "pre" | "ori" | "target" | "status"} DataType
  * @typedef {any} DATA
  */

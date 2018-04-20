@@ -71,7 +71,7 @@ comms.on("command", (commandString) => {
                 if (commandString[1] === '1') sensors.thpOn()
             }
             break;
-        case 'status':
+        case 's':
             console.log("status command")
             comms.send("status", sensors.status())
             break;
