@@ -29,11 +29,12 @@ exports.DELIMETER = "\n"; // 0x0A
  */
 exports.DEFAULT_BAUDRATE = 115200;
 var DELIMETERS = {
-    location: "L{",
+    loc: "L{",
     tmp: "T{",
     ori: "O{",
     umd: "U{",
-    pre: "P{"
+    pre: "P{",
+    tar: "G{"
 };
 /**
  * @description Delimeter for the ```gpsData()``` method
@@ -107,8 +108,8 @@ var XBee = /** @class */ (function (_super) {
             this.emit("bme-data", string.split(BME_DELIMETER)[1]);
         else if (string.indexOf(BNO_DELIMETER) !== -1)
             this.emit("bno-data", string.split(BNO_DELIMETER)[1]);
-        else if (string.indexOf(DELIMETERS.location) !== -1)
-            this.emit("location", string.split(DELIMETERS.location)[1]);
+        else if (string.indexOf(DELIMETERS.loc) !== -1)
+            this.emit("location", string.split(DELIMETERS.loc)[1]);
         else if (string.indexOf(DELIMETERS.ori) !== -1)
             this.emit("orientation", string.split(DELIMETERS.ori)[1]);
         else if (string.indexOf(DELIMETERS.pre) !== -1)
@@ -117,6 +118,8 @@ var XBee = /** @class */ (function (_super) {
             this.emit("temperature", string.split(DELIMETERS.tmp)[1]);
         else if (string.indexOf(DELIMETERS.umd) !== -1)
             this.emit("humidity", string.split(DELIMETERS.umd)[1]);
+        else if (string.indexOf(DELIMETERS.tar) !== -1)
+            thi.emit("target", string.split(DELIMETERS.tar)[1])
         else
             this.emit("data", string);
     };
@@ -170,6 +173,10 @@ var XBee = /** @class */ (function (_super) {
         if (this.port.writable)
             this.port.write("" + data + exports.DELIMETER);
     };
+
+    XBee.prototype.sendTarget = function(target) {
+        this.sendData("" + DELIMETERS.tar + target)
+    }
     /**
      * @description Send commands to ```onCommand(callback)``` or ```on("command", callback)```
      * @param {string} command Command to send
@@ -205,7 +212,7 @@ var XBee = /** @class */ (function (_super) {
      * @param {any} data
      */
     XBee.prototype.sendLOC = function (data) {
-        this.sendData("" + DELIMETERS['location'] + JSON.stringify(data));
+        this.sendData("" + DELIMETERS.loc + JSON.stringify(data));
     };
     /**
      * @description Send orientation data
