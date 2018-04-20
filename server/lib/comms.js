@@ -22,7 +22,7 @@ class Comms extends EventEmitter {
     this.xbee.onCommand(c => this.emit("command", c))
 
     this.timestamps = []
-    this.cooldown = 10
+    this.cooldown = 100
   }
 
   /**
@@ -41,10 +41,10 @@ class Comms extends EventEmitter {
     if (!this.timestamps[dataType]) this.timestamps[dataType] = Date.now()
     else if (Date.now() - this.timestamps[dataType] < this.cooldown) return
     else this.timestamps[dataType] = Date.now()
-    
+
     switch (dataType) {
       case "loc":
-        this.xbee.sentLOC(data)
+        this.xbee.sendLOC(data)
         break;
       case "ori":
         this.xbee.sendORI(data)
