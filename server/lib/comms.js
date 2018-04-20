@@ -30,7 +30,7 @@ class Comms extends EventEmitter {
    * @param {(...args) => {}} listener 
    */
   onE(event, listener) {
-    this.on(event, listener)  
+    this.on(event, listener)
   }
 
   /**
@@ -58,6 +58,9 @@ class Comms extends EventEmitter {
       case "tmp":
         this.xbee.sendTMP(data)
         break;
+      case "target":
+        this.xbee.sendTarget(data)
+        break;
       default:
         this.xbee.sendData(data)
         break;
@@ -69,6 +72,6 @@ class Comms extends EventEmitter {
 module.exports = Comms
 
 /**
- * @typedef {"loc" | "umd" | "tmp" | "pre" | "ori"} DataType
+ * @typedef {"loc" | "umd" | "tmp" | "pre" | "ori" | "target"} DataType
  * @typedef {any} DATA
  */
