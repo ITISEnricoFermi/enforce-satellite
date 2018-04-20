@@ -7,11 +7,16 @@ const SENSORS = require('./lib/sensors')
 const STORAGE = require("./storage/StorageClass")
 const ARCHIVER = require("./lib/archiver")
 const TARGETER = require("./lib/targeter")
+const MOTORS = require("./deps/motors")
+const PILOT = require("./lib/pilot")
 
+const motors = new MOTORS()
 const target = new TARGETER({
     x: 0,
     y: 0
 })
+
+const pilot = new PILOT(motors)
 const storage = new STORAGE()
 const archiver = new ARCHIVER(storage)
 const xbee = new XBee(process.env.XBEEPORT || "/dev/ttyS2", 115200)
@@ -109,11 +114,14 @@ sensors.on("location", d => {
     })
     delete d.course
     comms.send("loc", d)
+    comms.send("target", target)
 })
 
-setInterval(() => {
-    comms.send("target", {
-        angle: 1.5,
-        distance: 500
-    })
-}, 2000)
+// setInterval(() => {
+//     comms.send("target", {
+//         angle: 1.5,
+//         distance: 500
+//     })
+// }, 2000)
+
+pilot.enableAutopilot(target)
