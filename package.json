@@ -16,7 +16,6 @@
     "chai": "^4.1.2",
     "i2c-bus": "^1.2.0",
     "mocha": "^5.1.1",
-    "module-xbee": "^0.0.7",
     "node-nan": "^1.0.2",
     "serialport": "^6.1.1",
     "shelljs": "^0.8.1"

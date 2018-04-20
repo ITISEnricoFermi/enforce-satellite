@@ -1,12 +1,14 @@
-const XBee = require("module-xbee").XBee
+const XBee = require("./deps/XBee").XBee
 const COMMS = require('./lib/comms')
 const IMU = require("./deps/imu")
 const THP = require("./deps/thp")
 const GPS = require("./deps/gps")
 const SENSORS = require('./lib/sensors')
-// const Database = require("./database/database")
+const STORAGE = require("./storage/StorageClass")
+const ARCHIVER = require("./lib/archiver")
 
-// const db = new Database("./enforce.db")
+const storage = new STORAGE()
+const archiver = new ARCHIVER(storage)
 const xbee = new XBee(process.env.XBEEPORT || "/dev/ttyS2", 115200)
 const gps = new GPS("/dev/ttyS1")
 const comms = new COMMS(xbee)
@@ -27,6 +29,8 @@ let config = {
     transmit: true,
     autopilot: true
 }
+
+// archiver.beginMission()
 
 comms.on("command", (commandString) => {
     console.log('Received command: ' + commandString)
@@ -67,29 +71,26 @@ comms.on("command", (commandString) => {
 
 sensors.on("quaternion", d => {
     comms.send("ori", d)
-    // db.insertOri({ x: d.x, y: d.y, z: d.z, w: d.w, scale: 1 })
+    archiver.saveData("orientation", d)
 })
 
 sensors.on("temp", d => {
     comms.send("tmp", d)
-    // db.insertTemp(d)
+    archiver.saveData("temperature", d)
 })
 
 sensors.on("humidity", d => {
     comms.send("umd", d)
-    // db.insertUmid(d)
+    archiver.saveData("humidity", d)
 })
 
 sensors.on("pressure", d => {
     comms.send("pre", d)
+    archiver.saveData("pressure", d)
 })
 
 sensors.on("location", d => {
+    archiver.saveData("location", d)
     delete d.course
     comms.send("loc", d)
-    // db.insertPos({latitude: d.latitude, longitude: d.longitude, altitude: d.altitude})
 })
-
-// sensors.on("quaternion", d => {
-//     comms.send("ori", d)
-// })
