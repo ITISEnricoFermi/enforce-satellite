@@ -2,6 +2,9 @@ class Archiver {
     constructor(storage) {
         this.storage = storage
         this.missionId = null
+
+        this.timestamps = []
+        this.cooldown = 1000
     }
 
     beginMission() {
@@ -14,6 +17,11 @@ class Archiver {
 
     saveData(dataType, dataObject) {
         if (this.missionId === null) return
+
+        if (!this.timestamps[dataType]) this.timestamps[dataType] = Date.now()
+        else if (Date.now() - this.timestamps[dataType] < this.cooldown) return
+        else this.timestamps[dataType] = Date.now()
+
         this.storage.save(dataType, dataObject, this.missionId)
     }
 }
