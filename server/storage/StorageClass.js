@@ -41,22 +41,22 @@ class PlanB {
   save(datatype, data, timestamp) {
     switch (datatype) {
       case "humidity":
-        fs.writeFile(this.HUMIDITY_PATH, `${datatype}|${JSON.stringify(data)}|${timestamp}\n`, err => { if (err) console.log(err) })
+        fs.appendFile(this.HUMIDITY_PATH, `${datatype}|${JSON.stringify(data)}|${timestamp}\n`, err => { if (err) console.log(err) })
         break;
       case "location":
-        fs.writeFile(this.LOCATION_PATH, `${datatype}|${JSON.stringify(data)}|${timestamp}\n`, err => { if (err) console.log(err) })
+        fs.appendFile(this.LOCATION_PATH, `${datatype}|${JSON.stringify(data)}|${timestamp}\n`, err => { if (err) console.log(err) })
         break;
       case "temperature":
-        fs.writeFile(this.TEMPERATURE_PATH, `${datatype}|${JSON.stringify(data)}|${timestamp}\n`, err => { if (err) console.log(err) })
+        fs.appendFile(this.TEMPERATURE_PATH, `${datatype}|${JSON.stringify(data)}|${timestamp}\n`, err => { if (err) console.log(err) })
         break;
       case "pressure":
-        fs.writeFile(this.PRESSURE_PATH, `${datatype}|${JSON.stringify(data)}|${timestamp}\n`, err => { if (err) console.log(err) })
+        fs.appendFile(this.PRESSURE_PATH, `${datatype}|${JSON.stringify(data)}|${timestamp}\n`, err => { if (err) console.log(err) })
         break;
       case "orientation":
-        fs.writeFile(this.ORIENTATION_PATH, `${datatype}|${JSON.stringify(data)}|${timestamp}\n`, err => { if (err) console.log(err) })
+        fs.appendFile(this.ORIENTATION_PATH, `${datatype}|${JSON.stringify(data)}|${timestamp}\n`, err => { if (err) console.log(err) })
         break;
       default:
-        fs.writeFile(this.DUMP_PATH, `${datatype}|${JSON.stringify(data)}|${timestamp}\n`, err => { if (err) console.log(err) })
+        fs.appendFile(this.DUMP_PATH, `${datatype}|${JSON.stringify(data)}|${timestamp}\n`, err => { if (err) console.log(err) })
         break;
     }
   }
