@@ -6,7 +6,9 @@ const GPS = require("./deps/gps")
 const SENSORS = require('./lib/sensors')
 const STORAGE = require("./storage/StorageClass")
 const ARCHIVER = require("./lib/archiver")
+const TARGETER = require("./lib/targeter")
 
+const target = new TARGETER({x: 0, y: 0})
 const storage = new STORAGE()
 const archiver = new ARCHIVER(storage)
 const xbee = new XBee(process.env.XBEEPORT || "/dev/ttyS2", 115200)
@@ -74,6 +76,10 @@ sensors.on("quaternion", d => {
     archiver.saveData("orientation", d)
 })
 
+sensors.on("euler", d => {
+    target.setOrientation(d.heading)
+})
+
 sensors.on("temp", d => {
     comms.send("tmp", d)
     archiver.saveData("temperature", d)
@@ -91,6 +97,7 @@ sensors.on("pressure", d => {
 
 sensors.on("location", d => {
     archiver.saveData("location", d)
+    target.setPosition({x: d.longitude,y: d.latitude})
     delete d.course
     comms.send("loc", d)
 })

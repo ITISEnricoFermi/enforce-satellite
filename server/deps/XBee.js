@@ -175,7 +175,7 @@ var XBee = /** @class */ (function (_super) {
     };
 
     XBee.prototype.sendTarget = function(target) {
-        this.sendData("" + DELIMETERS.tar + target)
+        this.sendData("" + DELIMETERS.tar + JSON.stringify(target))
     }
     /**
      * @description Send commands to ```onCommand(callback)``` or ```on("command", callback)```
