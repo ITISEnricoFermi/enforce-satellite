@@ -2,7 +2,7 @@ const {
   EventEmitter
 } = require("events");
 
-class XBeeMock extends EventEmitter {
+class XBee extends EventEmitter {
   constructor() {
     super()
     let dt = setInterval(() => {
@@ -70,4 +70,4 @@ class XBeeMock extends EventEmitter {
   }
 }
 
-module.exports = XBeeMock
+module.exports = XBee
