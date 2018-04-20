@@ -13,6 +13,9 @@ class Archiver {
     }
 
     saveData(dataType, dataObject) {
-        storage.save(dataType, dataObject, this.missionId)
+        if (this.missionId === null) return
+        this.storage.save(dataType, dataObject, this.missionId)
     }
 }
+
+module.exports = Archiver
