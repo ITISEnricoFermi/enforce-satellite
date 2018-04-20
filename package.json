@@ -12,15 +12,11 @@
   "license": "MIT",
   "dependencies": {
     "async": "^1.4.2",
-    "bno055": "0.0.1",
     "chai": "^4.1.2",
     "i2c-bus": "^1.2.0",
     "mocha": "^5.1.1",
     "node-nan": "^1.0.2",
     "serialport": "^6.1.1",
     "shelljs": "^0.8.1"
-  },
-  "devDependencies": {
-    "socket.io-client": "^2.0.4"
   }
 }
