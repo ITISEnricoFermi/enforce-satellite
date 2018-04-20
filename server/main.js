@@ -94,3 +94,5 @@ sensors.on("location", d => {
     delete d.course
     comms.send("loc", d)
 })
+
+setInterval(() => comms.send("target", {angle: 1.5, distance: 500}), 2000)
