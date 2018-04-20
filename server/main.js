@@ -30,7 +30,7 @@ let config = {
     autopilot: true
 }
 
-// archiver.beginMission()
+archiver.beginMission()
 
 comms.on("command", (commandString) => {
     console.log('Received command: ' + commandString)
