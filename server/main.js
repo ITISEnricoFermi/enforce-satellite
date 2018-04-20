@@ -6,10 +6,10 @@ const GPS = require("./deps/gps")
 const SENSORS = require('./lib/sensors')
 
 const xbee = new XBee(process.env.XBEEPORT || "/dev/ttyS2", 115200)
-const gps = new GPS("/dev/ttyS1", 500)
+const gps = new GPS("/dev/ttyS1")
 const comms = new COMMS(xbee)
-const thp = new THP(500)
-const imu = new IMU(null, 500)
+const thp = new THP()
+const imu = new IMU(null)
 const sensors = new SENSORS({
     thp,
     imu,
