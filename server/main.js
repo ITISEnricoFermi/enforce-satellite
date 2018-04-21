@@ -1,8 +1,8 @@
-const XBee = require("./deps/XBee").XBee
+const XBee = require("./mock/XBee").XBee
 const COMMS = require('./lib/comms')
-const IMU = require("./deps/imu")
+const IMU = require("./mock/imu")
 const THP = require("./deps/thp")
-const GPS = require("./deps/gps")
+const GPS = require("./mock/gps")
 const SENSORS = require('./lib/sensors')
 const STORAGE = require("./storage/StorageClass")
 const ARCHIVER = require("./lib/archiver")
@@ -10,12 +10,13 @@ const TARGETER = require("./lib/targeter")
 const MOTORS = require("./deps/motors")
 const PILOT = require("./lib/pilot")
 const CAMERA = require("./deps/Camera")
+const spawn = require('child_process').spawn
 
 const source_stream = "http://localhost:8080/?action=stream"
 const destination_directory = "/home/sd"
 const destination_file = "cncjs-recording_$(date +'%Y%m%d_%H%M%S').mpeg"
 
-const streaming = require('child_process').spawn("ffmpeg", ["-f", "mjpeg", "-re", "-i", source_stream, "-q:v", "10", `${destination_directory}/${destination_file}`]);
+const streaming = spawn("ffmpeg", ["-f", "mjpeg", "-re", "-i", source_stream, "-q:v", "10", `${destination_directory}/${destination_file}`]);
 streaming.stdout.on("data", d => {
     console.log(d.toString())
 })
@@ -90,7 +91,7 @@ comms.on("command", (commandString) => {
                 }
                 if (commandString[2] === '1') {
                     if (streaming.killed)
-                        streaming = require('child_process').spawn("ffmpeg", ["-f", "mjpeg", "-re", "-i", source_stream, "-q:v", "10", `${destination_directory}/${destination_file}`]);
+                        streaming = spawn("ffmpeg", ["-f", "mjpeg", "-re", "-i", source_stream, "-q:v", "10", `${destination_directory}/${destination_file}`]);
                 }
             } else {
                 if (commandString[1] === '0') {
@@ -100,7 +101,7 @@ comms.on("command", (commandString) => {
                 if (commandString[1] === '1') {
                     if (streaming.killed) {
                         streaming.kill()
-                        streaming = require('child_process').spawn("ffmpeg", ["-f", "mjpeg", "-re", "-i", source_stream, "-q:v", "10", `${destination_directory}/${destination_file}`]);
+                        streaming = spawn("ffmpeg", ["-f", "mjpeg", "-re", "-i", source_stream, "-q:v", "10", `${destination_directory}/${destination_file}`]);
                     }
                 }
             }
