@@ -9,6 +9,16 @@ const ARCHIVER = require("./lib/archiver")
 const TARGETER = require("./lib/targeter")
 const MOTORS = require("./deps/motors")
 const PILOT = require("./lib/pilot")
+const CAMERA = require("./deps/Camera")
+
+const source_stream = "http://localhost:8080/?action=stream"
+const destination_directory = "/home/sd"
+const destination_file = "cncjs-recording_$(date +'%Y%m%d_%H%M%S').mpeg"
+
+const streaming = require('child_process').spawn("ffmpeg", ["-f", "mjpeg", "-re", "-i", source_stream, "-q:v", "10", `${destination_directory}/${destination_file}`]);
+streaming.stdout.on("data", d => {
+    console.log(d.toString())
+})
 
 const motors = new MOTORS()
 const target = new TARGETER({
@@ -25,20 +35,21 @@ const comms = new COMMS(xbee)
 const thp = new THP()
 const imu = new IMU(null)
 const sensors = new SENSORS({
-    thp,
-    imu,
-    gps
+    // thp,
+    // imu,
+    // gps
 })
 
-// const motors = require('./mock/motors.mock')
-// const targeter = require('./lib/targeter')
-// const pilot = require('./lib/pilot')(motors)
+/* 
+# [Varables]
+source_stream="http://localhost:8080/?action=stream"
+destination_directory="/home/sd"
+destination_file="cncjs-recording_$(date +'%Y%m%d_%H%M%S').mpeg"
 
-let config = {
-    record: false,
-    transmit: true,
-    autopilot: true
-}
+# Recored Stream w/ ffmpeg
+ffmpeg -f mjpeg -re -i "${source_stream}" -q:v 10 "${destination_directory}/${destination_file}"
+
+*/
 
 archiver.beginMission()
 
@@ -62,7 +73,37 @@ comms.on("command", (commandString) => {
                 if (commandString[1] === '1') sensors.gpsOn()
             }
             break;
+        case 'x':
+            let locarr = commandString.split(",")
+            let lat = parseFloat(locarr[0].slice(1))
+            let lon = parseFloat(locarr[1])
+            target.setTarget({
+                x: lon,
+                y: lat
+            })
+            break;
         case 'c':
+            if (commandString[1] === 's') {
+                if (commandString[2] === '0') {
+                    if (!streaming.killed)
+                        streaming.kill('SIGINT')
+                }
+                if (commandString[2] === '1') {
+                    if (streaming.killed)
+                        streaming = require('child_process').spawn("ffmpeg", ["-f", "mjpeg", "-re", "-i", source_stream, "-q:v", "10", `${destination_directory}/${destination_file}`]);
+                }
+            } else {
+                if (commandString[1] === '0') {
+                    if (!streaming.killed)
+                        streaming.send("q", err => console.log(e))
+                }
+                if (commandString[1] === '1') {
+                    if (streaming.killed) {
+                        streaming.kill()
+                        streaming = require('child_process').spawn("ffmpeg", ["-f", "mjpeg", "-re", "-i", source_stream, "-q:v", "10", `${destination_directory}/${destination_file}`]);
+                    }
+                }
+            }
             break;
         case 'i':
             if (sensors.SENSORS.imu) {
@@ -77,7 +118,14 @@ comms.on("command", (commandString) => {
             }
             break;
         case 's':
-            comms.send("status", sensors.status())
+            comms.send("status", Object.assign({}, sensors.status(), motors.getStatus()))
+            break;
+        case 'p':
+            if (commandString[1] === '0') pilot.disableAutopilot()
+            if (commandString[1] === '1') pilot.enableAutopilot()
+            break;
+        default:
+            comms.send(null, `Command ${commandString} not defined.`)
             break;
     }
 })
@@ -116,12 +164,5 @@ sensors.on("location", d => {
     comms.send("loc", d)
     comms.send("target", target)
 })
-
-// setInterval(() => {
-//     comms.send("target", {
-//         angle: 1.5,
-//         distance: 500
-//     })
-// }, 2000)
 
 pilot.enableAutopilot(target)
