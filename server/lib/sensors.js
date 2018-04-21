@@ -49,7 +49,7 @@ class Sensors extends EventEmitter {
     }
 
     status() {
-        return { gps: this.gps.running, imu: this.imu.running, thp: this.thp.running }
+        return { gps: this.gps ? this.gps.running : false, imu: this.imu ? this.imu.running : false, thp: this.thp ? this.thp.running : false }
     }
 
     gpsOn() {
