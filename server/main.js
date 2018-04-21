@@ -85,11 +85,12 @@ comms.on("command", (commandString) => {
             }
             break;
         case 's':
-            comms.send("status", Object.assign({}, sensors.status(), motors.getStatus()))
+            comms.send("status", Object.assign({}, sensors.status(), motors.getStatus(), pilot.status()))
             break;
         case 'p':
             if (commandString[1] === '0') pilot.disableAutopilot()
             if (commandString[1] === '1') pilot.enableAutopilot()
+            comms.send("status", Object.assign({}, sensors.status(), motors.getStatus(), pilot.status()))
             break;
         default:
             comms.send(null, `Command ${commandString} not defined.`)

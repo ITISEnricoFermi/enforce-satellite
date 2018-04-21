@@ -1,7 +1,6 @@
 class Pilot {
     constructor (motors) {
         this.motors = motors
-
         this.config = {
             autopilotEnabled: false,
             updateInterval: 100,
@@ -59,6 +58,10 @@ class Pilot {
         if (this.config.debugEnabled) console.log('Breaking')
         this.motors.setRight(true)
         this.motors.setLeft(true)        
+    }
+
+    status() {
+        return {pilot: this.config.autopilotEnabled}
     }
 }
 
