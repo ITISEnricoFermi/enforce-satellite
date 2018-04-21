@@ -27,11 +27,11 @@ class MotorsController {
     }
 
     setRight(state) {
-        this.right.writeSync(state ? 0 : 1)
+        this.right.writeSync(state ? 1 : 0)
     }
 
     setLeft(state) {
-        this.left.writeSync(state ? 0 : 1)
+        this.left.writeSync(state ? 1 : 0)
     }
 }
 
