@@ -3,7 +3,7 @@ const Gpio = require('onoff').Gpio
 class MotorsController {
     constructor() {
         this.left = new Gpio(64, 'out')
-        this.right = new Gpio(11, 'out')
+        this.right = new Gpio(65, 'out')
 
         process.on('SIGINT', () => {
             this.right.unexport();
