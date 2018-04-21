@@ -100,7 +100,7 @@ comms.on("command", (commandString) => {
                 }
                 if (commandString[1] === '1') {
                     if (streaming.killed) {
-                        streaming.kill()
+                        streaming.kill('SIGINT')
                         streaming = spawn("ffmpeg", ["-f", "mjpeg", "-re", "-i", source_stream, "-q:v", "10", `${destination_directory}/${destination_file}`]);
                     }
                 }
@@ -167,3 +167,7 @@ sensors.on("location", d => {
 })
 
 pilot.enableAutopilot(target)
+
+process.on('SIGINT', () => {
+    streaming.kill('SIGINT')
+})
