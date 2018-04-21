@@ -68,7 +68,7 @@ comms.on("command", (commandString) => {
                 if (commandString[2] === '0') camera.kill()
                 if (commandString[2] === '1') camera.start()
             } else {
-                if (commandString[1] === '0') camera.stop()
+                if (commandString[1] === '0') camera.kill()
                 if (commandString[1] === '1') camera.start()
             }
             break;
