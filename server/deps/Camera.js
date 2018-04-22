@@ -29,7 +29,7 @@ class Camera {
   }
 
   isRunning() {
-    return this.streaming.killed ? !this.streaming.killed : false
+    return this.streaming ? !this.streaming.killed : false
   }
 
   isSaving() {
