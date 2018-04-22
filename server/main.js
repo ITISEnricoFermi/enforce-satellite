@@ -133,7 +133,7 @@ sensors.on("location", d => {
 //    })
     delete d.course
     comms.send("loc", d)
-    comms.send("target", target)
+    comms.send("target", Object.assign({}, {target: target.target}, {directionD: target.getTargetDirectionDelta(), distance: target.getTargetDistance()}))
 })
 
 pilot.enableAutopilot(target)
