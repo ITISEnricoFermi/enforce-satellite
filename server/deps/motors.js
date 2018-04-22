@@ -5,6 +5,9 @@ class MotorsController {
         this.left = new Gpio(64, 'out')
         this.right = new Gpio(65, 'out')
 
+        this.setLeft(false)
+        this.setRight(false)
+
         process.on('SIGINT', () => {
             this.right.unexport();
             this.left.unexport();
