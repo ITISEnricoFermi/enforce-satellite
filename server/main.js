@@ -13,8 +13,13 @@ const CAMERA = require("./deps/Camera")
 
 const motors = new MOTORS()
 const target = new TARGETER({
-    x: 11.632913,
-    y: 44.520115
+    x: 10.932707,
+    y: 44.649381
+})
+
+target.setPosition({
+    x: 10.929782,
+    y: 44.649649
 })
 
 const camera = new CAMERA().start()
