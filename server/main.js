@@ -56,11 +56,9 @@ comms.on("command", (commandString) => {
             break;
         case 'x':
             let locarr = commandString.split(",")
-            let lat = parseFloat(locarr[0].slice(1))
-            let lon = parseFloat(locarr[1])
             target.setTarget({
-                x: lon,
-                y: lat
+                x: parseFloat(locarr[1]),
+                y: parseFloat(locarr[0].slice(1))
             })
             break;
         case 'c':
@@ -124,10 +122,10 @@ sensors.on("pressure", d => {
 
 sensors.on("location", d => {
     archiver.saveData("location", d)
-    target.setPosition({
-        x: d.longitude,
-        y: d.latitude
-    })
+//    target.setPosition({
+//        x: d.longitude,
+//        y: d.latitude
+//    })
     delete d.course
     comms.send("loc", d)
     comms.send("target", target)
