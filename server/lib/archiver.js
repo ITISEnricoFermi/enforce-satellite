@@ -4,7 +4,7 @@ class Archiver {
         this.missionId = null
 
         this.timestamps = []
-        this.cooldown = 1000
+        this.cooldown = 100
     }
 
     beginMission() {

@@ -26,14 +26,6 @@ class Comms extends EventEmitter {
   }
 
   /**
-   * @param {"data" | "command"} event 
-   * @param {(...args) => {}} listener 
-   */
-  onE(event, listener) {
-    this.on(event, listener)
-  }
-
-  /**
    * @param {DataType} dataType 
    * @param {DATA} data 
    */

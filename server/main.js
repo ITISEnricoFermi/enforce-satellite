@@ -7,11 +7,18 @@ const SENSORS = require('./lib/sensors')
 const STORAGE = require("./storage/StorageClass")
 const ARCHIVER = require("./lib/archiver")
 const TARGETER = require("./lib/targeter")
+const MOTORS = require("./deps/motors")
+const PILOT = require("./lib/pilot")
+const CAMERA = require("./deps/Camera")
 
+const motors = new MOTORS()
 const target = new TARGETER({
-    x: 0,
-    y: 0
+    x: 11.632913,
+    y: 44.520115
 })
+
+const camera = new CAMERA().start()
+const pilot = new PILOT(motors)
 const storage = new STORAGE()
 const archiver = new ARCHIVER(storage)
 const xbee = new XBee(process.env.XBEEPORT || "/dev/ttyS2", 115200)
@@ -24,16 +31,6 @@ const sensors = new SENSORS({
     imu,
     gps
 })
-
-// const motors = require('./mock/motors.mock')
-// const targeter = require('./lib/targeter')
-// const pilot = require('./lib/pilot')(motors)
-
-let config = {
-    record: false,
-    transmit: true,
-    autopilot: true
-}
 
 archiver.beginMission()
 
@@ -57,7 +54,23 @@ comms.on("command", (commandString) => {
                 if (commandString[1] === '1') sensors.gpsOn()
             }
             break;
+        case 'x':
+            let locarr = commandString.split(",")
+            let lat = parseFloat(locarr[0].slice(1))
+            let lon = parseFloat(locarr[1])
+            target.setTarget({
+                x: lon,
+                y: lat
+            })
+            break;
         case 'c':
+            if (commandString[1] === 's') {
+                if (commandString[2] === '0') camera.kill()
+                if (commandString[2] === '1') camera.start()
+            } else {
+                if (commandString[1] === '0') camera.kill()
+                if (commandString[1] === '1') camera.start()
+            }
             break;
         case 'i':
             if (sensors.SENSORS.imu) {
@@ -72,7 +85,15 @@ comms.on("command", (commandString) => {
             }
             break;
         case 's':
-            comms.send("status", sensors.status())
+            comms.send("status", Object.assign({}, sensors.status(), motors.getStatus(), pilot.status()))
+            break;
+        case 'p':
+            if (commandString[1] === '0') pilot.disableAutopilot()
+            if (commandString[1] === '1') pilot.enableAutopilot()
+            comms.send("status", Object.assign({}, sensors.status(), motors.getStatus(), pilot.status()))
+            break;
+        default:
+            comms.send(null, `Command ${commandString} not defined.`)
             break;
     }
 })
@@ -109,11 +130,11 @@ sensors.on("location", d => {
     })
     delete d.course
     comms.send("loc", d)
+    comms.send("target", target)
 })
 
-setInterval(() => {
-    comms.send("target", {
-        angle: 1.5,
-        distance: 500
-    })
-}, 2000)
+pilot.enableAutopilot(target)
+
+process.on('SIGINT', () => {
+    camera.kill()
+})

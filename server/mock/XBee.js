@@ -70,4 +70,4 @@ class XBee extends EventEmitter {
   }
 }
 
-module.exports = XBee
+module.exports = {XBee}
