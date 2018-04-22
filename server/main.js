@@ -9,7 +9,7 @@ const ARCHIVER = require("./lib/archiver")
 const TARGETER = require("./lib/targeter")
 const MOTORS = require("./deps/motors")
 const PILOT = require("./lib/pilot")
-const CAMERA = require("./deps/Camera")
+const CAMERA = require("./deps/camera")
 
 const motors = new MOTORS()
 const target = new TARGETER({
