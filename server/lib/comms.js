@@ -22,7 +22,7 @@ class Comms extends EventEmitter {
     this.xbee.onCommand(c => this.emit("command", c))
 
     this.timestamps = []
-    this.cooldown = 100
+    this.cooldown = 500
   }
 
   /**
