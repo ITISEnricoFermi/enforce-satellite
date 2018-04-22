@@ -4,9 +4,6 @@ class MotorsController {
     constructor() {
         this.left = new Gpio(64, 'out')
         this.right = new Gpio(11, 'out')
-
-        this.setRight(false)
-        this.setLeft(false)
     }
 
     setRight(state) {
