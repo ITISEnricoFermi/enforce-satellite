@@ -1,3 +1,5 @@
+const debug = require("debug")("mock:motors")
+
 class MotorsController {
     constructor() {
         this.debugEnabled = false
@@ -8,11 +10,11 @@ class MotorsController {
     }
 
     setRight(state) {
-        if (this.debugEnabled) console.log('Right motor set to: ' + state)
+        if (this.debugEnabled) debug('Right motor set to: ' + state)
     }
 
     setLeft(state) {
-        if (this.debugEnabled) console.log('Left motor set to: ' + state)
+        if (this.debugEnabled) debug('Left motor set to: ' + state)
     }
 }
 

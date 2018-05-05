@@ -1,15 +1,18 @@
-const XBee = require("./deps/XBee").XBee
+const debug = require("debug")("main")
+
+const XBee = require("./mock/XBee").XBee
+const IMU = require("./mock/imu")
+const THP = require("./mock/thp")
+const GPS = require("./mock/gps")
+const MOTORS = require("./mock/motors")
+const CAMERA = require("./mock/camera")
+const STORAGE = require("./mock/storage")
+
 const COMMS = require('./lib/comms')
-const IMU = require("./deps/imu")
-const THP = require("./deps/thp")
-const GPS = require("./deps/gps")
 const SENSORS = require('./lib/sensors')
-const STORAGE = require("./storage/StorageClass")
 const ARCHIVER = require("./lib/archiver")
 const TARGETER = require("./lib/targeter")
-const MOTORS = require("./deps/motors")
 const PILOT = require("./lib/pilot")
-const CAMERA = require("./deps/camera")
 
 const motors = new MOTORS()
 const target = new TARGETER({
@@ -22,15 +25,16 @@ target.setPosition({
     y: 44.649649
 })
 
-const camera = new CAMERA().start()
-const pilot = new PILOT(motors)
-const storage = new STORAGE()
-const archiver = new ARCHIVER(storage)
 const xbee = new XBee(process.env.XBEEPORT || "/dev/ttyS2", 115200)
+const storage = new STORAGE()
 const gps = new GPS("/dev/ttyS1")
-const comms = new COMMS(xbee)
 const thp = new THP()
 const imu = new IMU(null)
+const camera = new CAMERA().start()
+
+const comms = new COMMS(xbee)
+const pilot = new PILOT(motors)
+const archiver = new ARCHIVER(storage)
 const sensors = new SENSORS({
     thp,
     imu,
@@ -40,7 +44,7 @@ const sensors = new SENSORS({
 archiver.beginMission()
 
 comms.on("command", (commandString) => {
-    console.log('Received command: ' + commandString)
+    debug('Received command: ' + commandString)
     switch (commandString[0]) {
         case 'm':
             let motorState
@@ -96,13 +100,13 @@ comms.on("command", (commandString) => {
             comms.send("status", Object.assign({}, sensors.status(), motors.getStatus(), pilot.status()))
             break;
         default:
-            comms.send(null, `Command ${commandString} not defined.`)
+            comms.send(`Command ${commandString} not defined.`)
             break;
     }
 })
 
 sensors.on("quaternion", d => {
-    comms.send("ori", d)
+    comms.send("orientation", d)
     archiver.saveData("orientation", d)
 })
 
@@ -110,34 +114,36 @@ sensors.on("euler", d => {
     target.setOrientation(d.heading)
 })
 
-sensors.on("temp", d => {
-    comms.send("tmp", d)
+sensors.on("temperature", d => {
+    comms.send("temperature", d)
     archiver.saveData("temperature", d)
 })
 
 sensors.on("humidity", d => {
-    comms.send("umd", d)
+    comms.send("humidity", d)
     archiver.saveData("humidity", d)
 })
 
 sensors.on("pressure", d => {
-    comms.send("pre", d)
+    comms.send("pressure", d)
     archiver.saveData("pressure", d)
 })
 
-sensors.on("location", d => {
-    archiver.saveData("location", d)
+sensors.on("position", d => {
+    archiver.saveData("position", d)
 //    target.setPosition({
 //        x: d.longitude,
 //        y: d.latitude
 //    })
     delete d.course
-    comms.send("loc", d)
+    comms.send("position", d)
     comms.send("target", Object.assign({}, {target: target.target}, {directionD: target.getTargetDirectionDelta(), distance: target.getTargetDistance()}))
 })
 
 pilot.enableAutopilot(target)
 
 process.on('SIGINT', () => {
-    camera.kill()
+		camera.kill()
+		sensors.stopAll()
+		if (process.env.DEBUG) process.exit(0)
 })

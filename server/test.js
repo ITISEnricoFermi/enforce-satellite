@@ -1,7 +1,11 @@
-const XBee = require('./mock/XBee')
-const Comms = require('./lib/comms')
+const STO = require("enforce-mysql")//"./storage/StorageClass")
+const storage = new STO();
 
-const xbee = new XBee()
-const comms = new Comms()
+const ARC = require("./lib/archiver")
+const archiver = new ARC(storage);
 
-setInterval(comms.send('loc', {x: 'asd'}), 100)
+archiver.beginMission()
+
+setInterval(() => {
+	archiver.saveData({position: {longitude: 234, latitude: 3423, altitude: 32498273}})
+}, 1000)

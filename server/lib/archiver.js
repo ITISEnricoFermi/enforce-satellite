@@ -1,29 +1,27 @@
 class Archiver {
-    constructor(storage) {
-        this.storage = storage
-        this.missionId = null
+	constructor(storage) {
+		this.storage = storage
+		this.missionId = null
 
-        this.timestamps = []
-        this.cooldown = 100
-    }
+		this.timestamps = []
+		this.cooldown = 50
+	}
 
-    beginMission() {
-        this.missionId = Date.now()
-    }
+	beginMission() {
+		this.missionId = Date.now()
+		this.storage.startMission(this.missionId)
+	}
 
-    endMission() {
-        this.missionId = null
-    }
+	endMission() {
+		this.missionId = null
+	}
 
-    saveData(dataType, dataObject) {
-        if (this.missionId === null) return
+	saveData(data) {
+		if (this.missionId === null) return
 
-        if (!this.timestamps[dataType]) this.timestamps[dataType] = Date.now()
-        else if (Date.now() - this.timestamps[dataType] < this.cooldown) return
-        else this.timestamps[dataType] = Date.now()
-
-        this.storage.save(dataType, dataObject, this.missionId)
-    }
+		data = Object.assign(data, {missionID: this.missionId})
+		this.storage.save(data)
+	}
 }
 
 module.exports = Archiver

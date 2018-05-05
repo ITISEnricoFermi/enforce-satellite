@@ -1,72 +1,38 @@
 const {
   EventEmitter
 } = require("events")
-const {
-  XBee
-} = require("../deps/XBee");
-
 
 /**
  * @description Wrapper for XBee module
  */
 class Comms extends EventEmitter {
-
-  /**
-   * @param {XBee} xbee
-   */
   constructor(xbee) {
     super()
     if (!xbee) throw new Error(`"xbee is not defined."`)
     this.xbee = xbee;
-    this.xbee.onData(d => this.emit("data", d))
-    this.xbee.onCommand(c => this.emit("command", c))
-
-    this.timestamps = []
-    this.cooldown = 500
+    this.xbee.on("data", d => this.emit("data", d))
+    this.xbee.on("command", c => this.emit("command", c))
   }
 
   /**
-   * @param {DataType} dataType 
-   * @param {DATA} data 
+   * @param {DataType} dataType
+   * @param {DATA} data
    */
   send(dataType, data) {
-    if (!this.timestamps[dataType]) this.timestamps[dataType] = Date.now()
-    else if (Date.now() - this.timestamps[dataType] < this.cooldown) return
-    else this.timestamps[dataType] = Date.now()
+		this.xbee.send(dataType, data)
+	}
 
-    switch (dataType) {
-      case "loc":
-        this.xbee.sendLOC(data)
-        break;
-      case "ori":
-        this.xbee.sendORI(data)
-        break;
-      case "umd":
-        this.xbee.sendUMD(data)
-        break;
-      case "pre":
-        this.xbee.sendPRE(data)
-        break;
-      case "tmp":
-        this.xbee.sendTMP(data)
-        break;
-      case "target":
-        this.xbee.sendTarget(data)
-        break;
-      case "status":
-        this.xbee.sendStatus(data)
-        break;
-      default:
-        this.xbee.sendData(data)
-        break;
-    }
-  }
-
+	/**
+	 * @description NEVER EVER USE THIS METHOD IN PRODUCTION
+	 */
+	stop() {
+		this.xbee = null
+	}
 }
 
 module.exports = Comms
 
 /**
- * @typedef {"loc" | "umd" | "tmp" | "pre" | "ori" | "target" | "status"} DataType
+ * @typedef {"position" | "temperature" | "orientation" | "humidity" | "pressure" | "target" | "status" | "command"} DataType
  * @typedef {any} DATA
  */

@@ -57,7 +57,7 @@ class GPS extends EventEmitter {
 }
 
 /**
- * @param {string} port 
+ * @param {string} port
  */
 module.exports = GPS
 

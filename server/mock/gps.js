@@ -1,21 +1,54 @@
-class GPS {
-  constructor() {
-    this.status = false
+const {
+  EventEmitter
+} = require("events")
+const debug = require("debug")("mock:gps")
+
+class GPS extends EventEmitter {
+  constructor(port, delay) {
+    super()
+    this.delay = (delay && !isNaN(delay)) ? delay : 10000
+    this._on = false
+    this.running = false
+    this.Start()
   }
-  GetData(callback) {
-    if (!this.status) throw new Error("First start the communication!")
-    if (callback && callback instanceof Function) {
-      callback({ latitude: 0, longitude: 0, speed: 10.0, altitude: 50, course: 152.093 })
-    } else {
-      return { latitude: 0, longitude: 0, speed: 10.0, altitude: 50, course: 152.093 }
+
+  Start() {
+    try {
+      if (!this._on) {
+        this._on = true
+        this.StartLoop()
+        debug("GPS enabled")
+      }
+    } catch (e) {
+      debug(e)
     }
   }
-  Start(port, callback) {
-    if (callback && callback instanceof Function) callback(null)
-    this.status = true
+
+  StartLoop() {
+    if (this._on && !this.running) {
+      this.running = true
+      this.run()
+    }
   }
-  Stop() {
-    this.status = false
+
+  run() {
+    this.loop = setTimeout(() => {
+      this.emit("data", {latitude: 23.0, longitude: 31.34, altitude: 123})
+      this.run()
+    }, this.delay)
+  }
+
+  StopLoop() {
+    if (this._on && this.running) {
+      clearTimeout(this.loop)
+      this.running = false
+    }
+  }
+
+  close() {
+    if (this._on) {
+      this._on = false
+    }
   }
 }
 

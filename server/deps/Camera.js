@@ -24,7 +24,7 @@ class Camera {
   }
 
   kill() {
-    if (!this.isRunning())
+    if ("kill" in this.streaming)
       this.streaming.kill('SIGINT')
   }
 
@@ -42,7 +42,7 @@ module.exports = Camera
 
 
 
-/* 
+/*
 # [Varables]
 source_stream="http://localhost:8080/?action=stream"
 destination_directory="/home/sd"

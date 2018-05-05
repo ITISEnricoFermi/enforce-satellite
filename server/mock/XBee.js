@@ -1,73 +1,36 @@
 const {
-  EventEmitter
-} = require("events");
+	EventEmitter
+} = require("events")
+const debug = require("debug")("mock:xbee")
 
 class XBee extends EventEmitter {
-  constructor() {
-    super()
-    let dt = setInterval(() => {
-      this.emit('data', "some random data")
-    }, 1000)
-    let ci = setInterval(() => {
-      this.emit("command", "asd0")
-    }, 3200)
-  }
+	constructor() {
+		super()
+		debug("Initialize xbee")
+		setInterval(() => {
+			this.emit('data', "some random data")
+		}, 1000)
+		setInterval(() => {
+			this.emit("command", "asd0")
+		}, 3200)
+	}
 
-  onData(callback) {
-    this.on("data", callback)
-  }
-
-  onCommand(callback) {
-    this.on("command", callback)
-  }
-
-  sendData(data) {
-    process.stdout.write("Sending data");
-    setTimeout(() => {
-      process.stdout.write(".")
-      setTimeout(() => {
-        process.stdout.write(".")
-        setTimeout(() => {
-          process.stdout.write(". ")
-          console.log("Woosh!")
-        }, 500)
-      }, 500)
-    }, 500)
-  }
-
-  sendCommand(command) {
-    process.stdout.write(`Sending command ${command}`);
-    setTimeout(() => {
-      process.stdout.write(".")
-      setTimeout(() => {
-        process.stdout.write(".")
-        setTimeout(() => {
-          process.stdout.write(". ")
-          console.log("Woosh!")
-        }, 500)
-      }, 500)
-    }, 500)
-  }
-
-  sentLOC(data) {
-    this.sendData(data)
-  }
-
-  sendORI(data) {
-    this.sendData(data)
-  }
-
-  sendUMD(data) {
-    this.sendData(data)
-  }
-
-  sendPRE(data) {
-    this.sendData(data)
-  }
-
-  sendTMP(data) {
-    this.sendData(data)
-  }
+	send(e, data) {
+		debug("sending data")
+		// process.stdout.write(`Sending ${e}`);
+		// setTimeout(() => {
+		// 	process.stdout.write(".")
+		// 	setTimeout(() => {
+		// 		process.stdout.write(".")
+		// 		setTimeout(() => {
+		// 			process.stdout.write(". ")
+		// 			debug("Woosh!")
+		// 		}, 500)
+		// 	}, 500)
+		// }, 500)
+	}
 }
 
-module.exports = {XBee}
+module.exports = {
+	XBee
+}
