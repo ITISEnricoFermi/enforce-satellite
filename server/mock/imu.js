@@ -12,6 +12,7 @@ class IMU extends EventEmitter {
 		setTimeout(() => {
 			this.enabled = true
 			debug('imu enabled')
+			this.startReading()
 		}, 100)
 	}
 
@@ -26,7 +27,7 @@ class IMU extends EventEmitter {
 					w: Math.random()
 				})
 				this.checkQuaternion()
-			}, this.delay), 0)
+			}, 0), this.delay)
 	}
 
 	checkEuler() {
@@ -39,7 +40,7 @@ class IMU extends EventEmitter {
 					heading: Math.random() * 360
 				})
 				this.checkEuler()
-			}, this.delay), 0)
+			}, 0), this.delay)
 	}
 
 	startReading() {
