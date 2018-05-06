@@ -28,7 +28,12 @@ class Sensors extends EventEmitter {
 		if (this.SENSORS.gps) {
 			this.gps = sensors.gps
 			this.gps.on("data", d => {
-				this.emit("position", d)
+				this.emit("position", Object.assign({}, {
+					latitude: d.latitude,
+					longitude: d.longitude,
+					altitude: d.altitude
+				}))
+				this.emit("rawposition", d)
 			})
 		}
 
