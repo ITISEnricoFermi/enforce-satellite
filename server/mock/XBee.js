@@ -1,22 +1,25 @@
 const {
 	EventEmitter
 } = require("events")
+const line = require("readline").createInterface({
+	input: process.stdin,
+	output: process.stdout
+})
 const debug = require("debug")("mock:xbee")
 
 class XBee extends EventEmitter {
 	constructor() {
 		super()
 		debug("Initialize xbee")
-		setInterval(() => {
-			this.emit('data', "some random data")
-		}, 1000)
-		setInterval(() => {
-			this.emit("command", "asd0")
-		}, 3200)
+		line.on("line", line => {
+			let c = line.split(" ")
+			this.emit(c[0], c[1])
+		})
 	}
 
 	send(e, data) {
-		debug("sending data")
+		debug(`Sending ${e}...`)
+		debug(`Data: %o`, data)
 		// process.stdout.write(`Sending ${e}`);
 		// setTimeout(() => {
 		// 	process.stdout.write(".")

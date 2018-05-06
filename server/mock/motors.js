@@ -1,21 +1,32 @@
 const debug = require("debug")("mock:motors")
 
 class MotorsController {
-    constructor() {
-        this.debugEnabled = false
-    }
+	constructor() {
+		debug('Initialize motors')
+	}
 
-    setDebug(state) {
-        this.debugEnabled = state
-    }
+	getStatusLeft() {
+		return Math.random() < .5 ? false : true
+	}
 
-    setRight(state) {
-        if (this.debugEnabled) debug('Right motor set to: ' + state)
-    }
+	getStatusRight() {
+		return Math.random() < .5 ? false : true
+	}
 
-    setLeft(state) {
-        if (this.debugEnabled) debug('Left motor set to: ' + state)
-    }
+	getStatus() {
+		return {
+			leftMotor: this.getStatusLeft(),
+			rightMotor: this.getStatusRight()
+		}
+	}
+
+	setRight(state) {
+		debug('Right motor set to: ' + state)
+	}
+
+	setLeft(state) {
+		debug('Left motor set to: ' + state)
+	}
 }
 
 module.exports = MotorsController

@@ -7,10 +7,9 @@ class IMU extends EventEmitter {
 	constructor() {
 		super()
 		debug("Initialize imu")
-		this.enabled = false
+		this.running = false
 		this.delay = 4000
 		setTimeout(() => {
-			this.enabled = true
 			debug('imu enabled')
 			this.startReading()
 		}, 100)
@@ -45,12 +44,14 @@ class IMU extends EventEmitter {
 
 	startReading() {
 		debug("Start reading")
+		this.running = true
 		this.checkQuaternion()
 		this.checkEuler()
 	}
 
 	stopReading() {
 		debug("Stop reading")
+		this.running = false
 		clearTimeout(this.quaternionChecker)
 		clearTimeout(this.eulerChecker)
 	}

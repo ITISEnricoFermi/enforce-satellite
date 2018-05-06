@@ -7,6 +7,7 @@ class THP extends EventEmitter {
 	constructor(delay) {
 		super()
 		this.delay = (delay && !isNaN(delay)) ? delay : 6000
+		this.running = false
 		this.startReading()
 	}
 
@@ -24,10 +25,12 @@ class THP extends EventEmitter {
 	}
 
 	startReading() {
+		this.running = true
 		this.readSensorData()
 	}
 
 	stopReading() {
+		this.running = false
 		clearTimeout(this.to)
 	}
 }
