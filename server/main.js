@@ -82,7 +82,7 @@ comms.on("command", (commandString) => {
         case 'i':
             if (sensors.SENSORS.imu) {
                 if (commandString[1] === '0') sensors.imuOff()
-                if (commandString[1] === '1') sensors.imiOn()
+                if (commandString[1] === '1') sensors.imuOn()
             }
             break;
         case 'b':

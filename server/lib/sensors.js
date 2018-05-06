@@ -3,6 +3,9 @@ const {
 } = require('events')
 
 class Sensors extends EventEmitter {
+		/**
+	 * @param {{imu: any, gps: any, thp: any}} sensors
+	 */
 	constructor(sensors) {
 		super()
 
@@ -69,7 +72,7 @@ class Sensors extends EventEmitter {
 			this.gps.StopLoop()
 	}
 
-	imiOn() {
+	imuOn() {
 		if (this.SENSORS.imu)
 			this.imu.startReading()
 	}
