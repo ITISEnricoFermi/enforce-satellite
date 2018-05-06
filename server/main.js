@@ -107,7 +107,7 @@ comms.on("command", (commandString) => {
 
 sensors.on("quaternion", d => {
     comms.send("orientation", d)
-    archiver.saveData("orientation", d)
+    archiver.saveData({orientation: d})
 })
 
 sensors.on("euler", d => {
@@ -116,21 +116,21 @@ sensors.on("euler", d => {
 
 sensors.on("temperature", d => {
     comms.send("temperature", d)
-    archiver.saveData("temperature", d)
+    archiver.saveData({temperature: d})
 })
 
 sensors.on("humidity", d => {
     comms.send("humidity", d)
-    archiver.saveData("humidity", d)
+    archiver.saveData({humidity: d})
 })
 
 sensors.on("pressure", d => {
     comms.send("pressure", d)
-    archiver.saveData("pressure", d)
+    archiver.saveData({pressure: d})
 })
 
 sensors.on("position", d => {
-    archiver.saveData("position", d)
+    archiver.saveData({position: d})
 //    target.setPosition({
 //        x: d.longitude,
 //        y: d.latitude
