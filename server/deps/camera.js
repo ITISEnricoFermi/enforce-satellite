@@ -24,7 +24,7 @@ class Camera {
   }
 
   kill() {
-    if ("kill" in this.streaming)
+    if (this.streaming && "kill" in this.streaming)
       this.streaming.kill('SIGINT')
   }
 
