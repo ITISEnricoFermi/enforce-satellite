@@ -20,18 +20,17 @@ class Sensors extends EventEmitter {
 		this.SENSORS.thp = sensors.hasOwnProperty("thp")
 
 		if (this.SENSORS.imu) {
-			this._initImu()
+			this._initImu(sensors)
 		}
 		if (this.SENSORS.gps) {
-			this._initGps()
+			this._initGps(sensors)
 		}
-
 		if (this.SENSORS.thp) {
-			this._initThp()
+			this._initThp(sensors)
 		}
 	}
 
-	_initThp() {
+	_initThp(sensors) {
 		this.thp = sensors.thp
 		this.thp.on("data", d => {
 			this.emit("temperature", d.temperature_C)
@@ -44,7 +43,7 @@ class Sensors extends EventEmitter {
 		})
 	}
 
-	_initGps() {
+	_initGps(sensors) {
 		this.gps = sensors.gps
 		this.gps.on("data", d => {
 			this.emit("position", Object.assign({}, {
@@ -56,7 +55,7 @@ class Sensors extends EventEmitter {
 		})
 	}
 
-	_initImu() {
+	_initImu(sensors) {
 		this.imu = sensors.imu
 		this.imu.on('quaternion', (data) => {
 			this.emit('quaternion', data)
