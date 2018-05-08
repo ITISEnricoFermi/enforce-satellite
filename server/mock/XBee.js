@@ -12,7 +12,7 @@ class XBee extends EventEmitter {
 		super()
 		debug("Initialize xbee")
 		line.on("line", line => {
-			let c = line.split(" ")
+			let c = line.split("/")
 			this.emit(c[0], c[1])
 		})
 	}
