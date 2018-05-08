@@ -34,6 +34,7 @@ class Camera {
 		if (this.streaming && "kill" in this.streaming) {
 			debug("Camera killed")
 			this.streaming.kill('SIGINT')
+			this.streaming = null
 		}
 	}
 
