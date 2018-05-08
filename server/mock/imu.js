@@ -17,7 +17,7 @@ class IMU extends EventEmitter {
 
 	checkQuaternion() {
 		debug("Check quaternion")
-		this.quaternionChecker = setTimeout(() =>
+		this.quaternionChecker = setTimeout(() => {
 			setTimeout((error, data) => {
 				this.emit('quaternion', {
 					x: Math.random(),
@@ -25,21 +25,23 @@ class IMU extends EventEmitter {
 					z: Math.random(),
 					w: Math.random()
 				})
-				this.checkQuaternion()
-			}, 0), this.delay)
+			}, 0)
+			this.checkQuaternion()
+		}, this.delay)
 	}
 
 	checkEuler() {
 		debug("Check euler")
-		this.eulerChecker = setTimeout(() =>
+		this.eulerChecker = setTimeout(() => {
 			setTimeout((error, data) => {
 				this.emit('euler', {
 					pitch: Math.random() * 360 - 180,
 					roll: Math.random() * 180 - 90,
 					heading: Math.random() * 360
 				})
-				this.checkEuler()
-			}, 0), this.delay)
+			}, 0)
+			this.checkEuler()
+		}, this.delay)
 	}
 
 	startReading() {
