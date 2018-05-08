@@ -19,7 +19,7 @@ class Camera {
   }
 
   stop() {
-    if (this.save)
+    if (this.streaming && this.save && "send" in this.streaming)
       this.streaming.send("q")
   }
 

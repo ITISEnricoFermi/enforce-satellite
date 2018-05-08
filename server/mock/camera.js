@@ -24,14 +24,14 @@ class Camera {
 	}
 
 	stop() {
-		if (this.save) {
+		if (this.streaming && this.save && "send" in this.streaming) {
 			debug("Stream only mode")
 			this.streaming.send("q")
 		}
 	}
 
 	kill() {
-		if ("kill" in this.streaming) {
+		if (this.streaming && "kill" in this.streaming) {
 			debug("Camera killed")
 			this.streaming.kill('SIGINT')
 		}
