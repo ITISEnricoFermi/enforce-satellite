@@ -3,14 +3,16 @@ const debug = require("debug")("mock:motors")
 class MotorsController {
 	constructor() {
 		debug('Initialize motors')
+		this.left = false
+		this.right = false
 	}
 
 	getStatusLeft() {
-		return Math.random() < .5 ? false : true
+		return this.left
 	}
 
 	getStatusRight() {
-		return Math.random() < .5 ? false : true
+		return this.right
 	}
 
 	getStatus() {
@@ -22,10 +24,12 @@ class MotorsController {
 
 	setRight(state) {
 		debug('Right motor set to: ' + state)
+		this.right = state
 	}
 
 	setLeft(state) {
 		debug('Left motor set to: ' + state)
+		this.left = state
 	}
 }
 
