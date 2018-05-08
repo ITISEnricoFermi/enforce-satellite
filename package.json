@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start": "set DEBUG=mock:xbee && node server/main.js",
+    "start": "set DEBUG=enforce-cli,mock:thp,mock:imu && node server/main.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [],
@@ -15,13 +15,14 @@
     "chai": "^4.1.2",
     "debug": "^3.1.0",
 		"mocha": "^5.1.1",
+    "enforce-mysql": "git+https://github.com/ITISEnricoFermi/enforce-mysql.git#v1.0.3",
+    "module-xbee": "git+https://github.com/n4y0n/node-xbee.git#v0.1.2",
+    "enforce-cli": "git+https://github.com/ITISEnricoFermi/enforce-cli.git#v0.0.0",
+		"node-nan": "git+http://git.riccardosangiorgio.com/n4y0n/libgps.git#v1.0.2",
 		"i2c-bus": "^1.2.0",
 		"onoff": "^3.0.2",
 		"i2c": "^0.2.3",
     "serialport": "^6.1.1",
-    "shelljs": "^0.8.1",
-		"node-nan": "git+http://git.riccardosangiorgio.com/n4y0n/libgps.git#v1.0.2",
-    "enforce-mysql": "git+https://github.com/ITISEnricoFermi/enforce-mysql.git#v1.0.3",
-    "module-xbee": "git+https://github.com/n4y0n/node-xbee.git#v0.1.2"
+    "shelljs": "^0.8.1"
   }
 }
