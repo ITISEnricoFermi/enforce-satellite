@@ -1,12 +1,14 @@
 const debug = require("debug")("mock:camera")
 class Camera {
 	constructor() {
+		debug("Initialize camera")
 		this.streaming = null
 		this.save = true
 	}
 
 	start() {
 		if (!this.isRunning()) {
+			debug("Camera enabled")
 			this.streaming = {
 				killed: false,
 				kill() {
@@ -22,13 +24,17 @@ class Camera {
 	}
 
 	stop() {
-		if (this.save)
+		if (this.save) {
+			debug("Stream only mode")
 			this.streaming.send("q")
+		}
 	}
 
 	kill() {
-		if ("kill" in this.streaming)
+		if ("kill" in this.streaming) {
+			debug("Camera killed")
 			this.streaming.kill('SIGINT')
+		}
 	}
 
 	isRunning() {
