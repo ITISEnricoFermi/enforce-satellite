@@ -26,6 +26,7 @@ class GPS extends EventEmitter {
 
   StartLoop() {
     if (this._on && !this.running) {
+      debug("Gps started")
       this.running = true
       this.run()
     }
@@ -40,6 +41,7 @@ class GPS extends EventEmitter {
 
   StopLoop() {
     if (this._on && this.running) {
+      debug("Gps stopped")
       clearTimeout(this.loop)
       this.running = false
     }
