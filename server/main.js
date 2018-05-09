@@ -1,4 +1,6 @@
 const debug = require("debug")("main")
+const config = require("../config.json")
+
 
 const XBee = require("./mock/XBee").XBee
 const IMU = require("./mock/imu")
@@ -26,9 +28,9 @@ targeter.setPosition({
 	y: 44.649649
 })
 
-const xbee = new XBee(process.env.XBEEPORT || "/dev/ttyS2", 115200)
+const xbee = new XBee(config.xbee ? config.xbee.port : "/dev/ttyS2", config.xbee ? config.xbee.baudRate : 115200)
 const storage = new STORAGE()
-const gps = new GPS("/dev/ttyS1")
+const gps = new GPS(config.gps || "/dev/ttyS1")
 const thp = new THP()
 const imu = new IMU(null)
 const camera = new CAMERA().start()
@@ -49,26 +51,26 @@ const cli = new ENFORCE_CLI(comms, {
 
 archiver.beginMission()
 
-comms.on("command", (commandString) => {
-	debug('Received command: ' + commandString)
-	switch (commandString[0]) {
-		case 'x':
-			let locarr = commandString.split(",")
-			targeter.setTarget({
-				x: parseFloat(locarr[1]),
-				y: parseFloat(locarr[0].slice(1))
-			})
-			break;
-		case 'p':
-			if (commandString[1] === '0') pilot.disableAutopilot()
-			if (commandString[1] === '1') pilot.enableAutopilot()
-			comms.send("status", Object.assign({}, sensors.status(), motors.getStatus(), pilot.status()))
-			break;
-		default:
-			comms.send(`Command ${commandString} not defined.`)
-			break;
-	}
-})
+// comms.on("command", (commandString) => {
+// 	debug('Received command: ' + commandString)
+// 	switch (commandString[0]) {
+// 		case 'x':
+// 			let locarr = commandString.split(",")
+// 			targeter.setTarget({
+// 				x: parseFloat(locarr[1]),
+// 				y: parseFloat(locarr[0].slice(1))
+// 			})
+// 			break;
+// 		case 'p':
+// 			if (commandString[1] === '0') pilot.disableAutopilot()
+// 			if (commandString[1] === '1') pilot.enableAutopilot()
+// 			comms.send("status", Object.assign({}, sensors.status(), motors.getStatus(), pilot.status()))
+// 			break;
+// 		default:
+// 			comms.send(`Command ${commandString} not defined.`)
+// 			break;
+// 	}
+// })
 
 sensors.on("quaternion", d => {
 	comms.send("orientation", d)
