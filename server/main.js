@@ -112,7 +112,6 @@ sensors.on("position", d => {
 	//        x: d.longitude,
 	//        y: d.latitude
 	//    })
-	delete d.course
 	comms.send("position", d)
 	comms.send("target", Object.assign({}, {
 		target: targeter.target
