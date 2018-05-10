@@ -24,18 +24,36 @@ class PlanB {
 		this.LOCATION_PATH = `${this.path}${this.LOCATION}.csv`
 		this.DUMP_PATH = `${this.path}${this.DUMP}.csv`
 
-		if (!fs.existsSync(this.HUMIDITY_PATH))
-			fs.writeFileSync(this.HUMIDITY_PATH, "")
-		if (!fs.existsSync(this.TEMPERATURE_PATH))
-			fs.writeFileSync(this.TEMPERATURE_PATH, "")
-		if (!fs.existsSync(this.ORIENTATION_PATH))
-			fs.writeFileSync(this.ORIENTATION_PATH, "")
-		if (!fs.existsSync(this.LOCATION_PATH))
-			fs.writeFileSync(this.LOCATION_PATH, "")
-		if (!fs.existsSync(this.PRESSURE_PATH))
-			fs.writeFileSync(this.PRESSURE_PATH, "")
-		if (!fs.existsSync(this.DUMP_PATH))
-			fs.writeFileSync(this.DUMP_PATH, "")
+		if (!fs.existsSync(this.HUMIDITY_PATH)) {
+			fs.appendFile(this.HUMIDITY_PATH, "\n", err => {
+				if (err) console.log(err)
+			})
+		}
+		if (!fs.existsSync(this.TEMPERATURE_PATH)) {
+			fs.appendFile(this.TEMPERATURE_PATH, "\n", err => {
+				if (err) console.log(err)
+			})
+		}
+		if (!fs.existsSync(this.ORIENTATION_PATH)) {
+			fs.appendFile(this.ORIENTATION_PATH, "\n", err => {
+				if (err) console.log(err)
+			})
+		}
+		if (!fs.existsSync(this.LOCATION_PATH)) {
+			fs.appendFile(this.LOCATION_PATH, "\n", err => {
+				if (err) console.log(err)
+			})
+		}
+		if (!fs.existsSync(this.PRESSURE_PATH)) {
+			fs.appendFile(this.PRESSURE_PATH, "\n", err => {
+				if (err) console.log(err)
+			})
+		}
+		if (!fs.existsSync(this.DUMP_PATH)) {
+			fs.appendFile(this.DUMP_PATH, "\n", err => {
+				if (err) console.log(err)
+			})
+		}
 	}
 
 	startMission(missionID) {

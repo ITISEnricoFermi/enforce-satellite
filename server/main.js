@@ -8,7 +8,7 @@ const THP = require("./mock/thp")
 const GPS = require("./mock/gps")
 const MOTORS = require("./mock/motors")
 const CAMERA = require("./mock/camera")
-const STORAGE = require("./mock/storage")
+const STORAGE = require("enforce-mysql")
 
 const COMMS = require('./lib/comms')
 const SENSORS = require('./lib/sensors')
