@@ -4,11 +4,10 @@ Satellite for Enforce Team - CanSat 2018
 
 ## Authors
 
-* **Ernesto Montada** - [n4y0n](https://github.com/n4y0n)
-* **Riccardo Sangiorgio** - [Richard1984](https://github.com/Richard1984)
-* **Hristo Kamenov** - [Revanee](https://github.com/Revanee)
-* **Sasha** - [Tox1k](https://github.com/Tox1k)
-* **Jacopo Evangelisti** - [JacopoEvangelisti](https://github.com/JacopoEvangelisti)
+* **Ernesto Montada** - *Sensors & Comunication* - [n4y0n](https://github.com/n4y0n)
+* **Riccardo Sangiorgio** - *mmm* - [Richard1984](https://github.com/Richard1984)
+* **Hristo Kamenov** - *Auto-guidance system* - [Revanee](https://github.com/Revanee)
+* **Sasha** - *Sensors & Path finding* - [Tox1k](https://github.com/Tox1k)
 
 ## License
 
