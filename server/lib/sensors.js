@@ -46,11 +46,11 @@ class Sensors extends EventEmitter {
 	_initGps(sensors) {
 		this.gps = sensors.gps
 		this.gps.on("data", d => {
-			this.emit("position", Object.assign({}, {
+			this.emit("position", {
 				latitude: d.latitude,
 				longitude: d.longitude,
 				altitude: d.altitude
-			}))
+			})
 			this.emit("rawposition", d)
 		})
 	}

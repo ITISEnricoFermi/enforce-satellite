@@ -80,7 +80,7 @@ sensors.on("quaternion", d => {
 })
 
 sensors.on("euler", d => {
-	targeter.setOrientation(d.heading)
+	if (d) targeter.setOrientation(d.heading)
 })
 
 sensors.on("temperature", d => {
