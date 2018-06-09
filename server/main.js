@@ -3,11 +3,6 @@ const config = require("../config.json")
 
 
 const XBee = require("./mock/XBee").XBee
-const IMU = require("./mock/imu")
-const THP = require("./mock/thp")
-const GPS = require("./mock/gps")
-const MOTORS = require("./mock/motors")
-const CAMERA = require("./mock/camera")
 const STORAGE = require("enforce-mysql")
 
 const COMMS = require('./lib/comms')
@@ -17,7 +12,6 @@ const TARGETER = require("./lib/targeter")
 const PILOT = require("./lib/pilot")
 const ENFORCE_CLI = require("enforce-cli")
 
-const motors = new MOTORS()
 const targeter = new TARGETER({
 	x: 10.932707,
 	y: 44.649381
@@ -30,23 +24,13 @@ targeter.setPosition({
 
 const xbee = new XBee(config.xbee ? config.xbee.port : "/dev/ttyS2", config.xbee ? config.xbee.baudRate : 115200)
 const storage = new STORAGE()
-const gps = new GPS(config.gps || "/dev/ttyS1")
-const thp = new THP()
-const imu = new IMU(null)
-const camera = new CAMERA().start()
 
 const comms = new COMMS(xbee)
 const pilot = new PILOT(motors)
 const archiver = new ARCHIVER(storage)
-const sensors = new SENSORS({
-	thp,
-	imu,
-	gps
-})
+const sensors = new SENSORS({})
 const cli = new ENFORCE_CLI(comms, {
-	sensors,
-	motors,
-	camera
+	sensors
 })
 
 archiver.beginMission()
@@ -124,7 +108,5 @@ sensors.on("position", d => {
 pilot.enableAutopilot(targeter)
 
 process.on('SIGINT', () => {
-	camera.kill()
-	sensors.stopAll()
 	if (process.env.DEBUG) process.exit(0)
 })
