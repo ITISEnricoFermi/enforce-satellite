@@ -15,9 +15,5 @@ module.exports = {
 	},
 
 	events: {
-		"echo.event"(data, sender) {
-			this.logger.info(`<< MATH: Echo event received from ${sender}. Counter: ${data.counter}. Send reply...`);
-			this.broker.emit("reply.event", data);
-		}
 	}
 }
