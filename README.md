@@ -1,31 +1,14 @@
-[![Moleculer](https://img.shields.io/badge/Powered%20by-Moleculer-green.svg?colorB=0e83cd)](https://moleculer.services)
+# Enforce satellite
 
-# enf-satellite
+Satellite for Enforce Team - CanSat 2018
 
-## Build Setup
+## Authors
 
-``` bash
-# Install dependencies
-npm install
+* **Ernesto Montada** - *Sensors & Comunication* - [n4y0n](https://github.com/n4y0n)
+* **Riccardo Sangiorgio** - *Legal assistance* - [Richard1984](https://github.com/Richard1984)
+* **Hristo Kamenov** - *Auto-guidance system* - [Revanee](https://github.com/Revanee)
+* **Oleksandr Soludchyk** - *Sensors & Path finding* - [Tox1k](https://github.com/Tox1k)
 
-# Start developing with REPL
-npm run dev
+## License
 
-# Start production
-npm start
-
-# Run unit tests
-npm test
-
-# Run continuous test mode
-npm run ci
-
-# Run ESLint
-npm run lint
-```
-
-## Run in Docker
-
-```bash
-$ docker-compose up -d --build
-```
+This project is licensed under the GPL-3.0 License - see the [LICENSE](LICENSE) file for details

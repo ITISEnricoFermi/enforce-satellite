@@ -1,0 +1,12 @@
+{
+    "gps": "/dev/ttyS0",
+    "xbee": {
+        "port": "COM6",
+        "baudRate": 115200
+    },
+    "backupStorage": {
+        "active": false,
+        "filename": "enforce-stg",
+        "path": "./"
+    } 
+}
