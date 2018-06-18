@@ -1,59 +1,59 @@
 const {
-  EventEmitter
+	EventEmitter
 } = require("events")
 const gps = require("node-nan")
 
 class GPS extends EventEmitter {
-  constructor(port, delay) {
-    super()
-    this.port = port
-    this.delay = (delay && !isNaN(delay)) ? delay : 0
-    this._on = false
-    this.running = false
-    this.Start()
-  }
+	constructor(port, delay) {
+		super()
+		this.port = port
+		this.delay = (delay && !isNaN(delay)) ? delay : 0
+		this._on = false
+		this.running = false
+		this.Start()
+	}
 
-  Start() {
-    try {
-      if (!this._on) {
-        gps.Start(this.port)
-        this._on = true
-        this.StartLoop()
-        console.log("GPS enabled")
-      }
-    } catch (e) {
-      gps.Stop()
-      console.error(e)
-    }
-  }
+	Start() {
+		try {
+			if (!this._on) {
+				gps.Start(this.port)
+				this._on = true
+				this.StartLoop()
+				console.log("GPS enabled")
+			}
+		} catch (e) {
+			gps.Stop()
+			console.error(e)
+		}
+	}
 
-  StartLoop() {
-    if (this._on && !this.running) {
-      this.running = true
-      this.run()
-    }
-  }
+	StartLoop() {
+		if (this._on && !this.running) {
+			this.running = true
+			this.run()
+		}
+	}
 
-  run() {
-    this.loop = setTimeout(() => {
-      this.emit("data", gps.GetData())
-      this.run()
-    }, this.delay)
-  }
+	run() {
+		this.loop = setTimeout(() => {
+			this.emit("data", gps.GetData())
+			this.run()
+		}, this.delay)
+	}
 
-  StopLoop() {
-    if (this._on && this.running) {
-      clearTimeout(this.loop)
-      this.running = false
-    }
-  }
+	StopLoop() {
+		if (this._on && this.running) {
+			clearTimeout(this.loop)
+			this.running = false
+		}
+	}
 
-  close() {
-    if (this._on) {
-      this._on = false
-      gps.Stop()
-    }
-  }
+	close() {
+		if (this._on) {
+			this._on = false
+			gps.Stop()
+		}
+	}
 }
 
 /**
