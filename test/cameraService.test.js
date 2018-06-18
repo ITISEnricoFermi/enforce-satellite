@@ -1,6 +1,6 @@
-let {ServiceBroker} = require("moleculer");
+let {ServiceBroker} = require("moleculer")
 
-let transporter = process.env.TRANSPORTER || "TCP";
+let transporter = process.env.TRANSPORTER || "TCP"
 
 // Create broker
 let broker = new ServiceBroker({
@@ -17,25 +17,27 @@ let broker = new ServiceBroker({
 	logger: console,
 	logLevel: process.env.LOGLEVEL,
 	logFormatter: "simple"
-});
+})
 
 broker.createService({
 	name: "event-handler",
 	events: {
-
-	},
-	started() {
+		"thp.data"(data) {
+			this.logger.info(data)
+		},
+		"imu.quaternion"(data) {
+			this.logger.info(data)
+		},
+		"imu.euler"(data) {
+			this.logger.info(data)
+		},
+		"gps.data"(data) {
+			this.logger.info(data)
+		}
 	}
-});
+})
 
-let reqCount = 0;
-let pendingReqs = [];
 
 broker.start()
 	.then(() => broker.repl())
-	.then(() => broker.waitForServices("camera"))
-	.then(() => {
-		setInterval(() => {
-			broker.call("camera.start")
-		}, 1000);
-	});
+	.then(() => broker.waitForServices("gps"))
