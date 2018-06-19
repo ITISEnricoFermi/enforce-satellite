@@ -17,33 +17,55 @@ const TARGETER = require("./lib/targeter")
 const PILOT = require("./lib/pilot")
 const ENFORCE_CLI = require("enforce-cli")
 
+debug("Init motors")
 const motors = new MOTORS()
+
+debug("Init targeter")
 const targeter = new TARGETER({
 	x: 10.932707,
 	y: 44.649381
 })
 
+debug("Init targeter position")
 targeter.setPosition({
 	x: 10.929782,
 	y: 44.649649
 })
 
+debug("Init xbee")
 const xbee = new XBee(config.xbee ? config.xbee.port : "/dev/ttyS2", config.xbee ? config.xbee.baudRate : 115200)
+
+debug("Init storage")
 const storage = new STORAGE()
+
+debug("Init gps")
 const gps = new GPS(config.gps || "/dev/ttyS1")
+
+debug("Init thp")
 const thp = new THP()
+
+debug("Init imu")
 const imu = new IMU(null)
+
+debug("Init camera")
 const camera = new CAMERA().start()
 
+debug("Init comunication")
 const comms = new COMMS(xbee)
+
+debug("Init pilot")
 const pilot = new PILOT(motors)
+
+debug("Init archiver")
 const archiver = new ARCHIVER(storage)
 const sensors = new SENSORS({
 	thp,
 	imu,
 	gps
 })
-const cli = new ENFORCE_CLI(comms, {
+
+debug("Init cli")
+new ENFORCE_CLI(comms, {
 	sensors,
 	motors,
 	camera
