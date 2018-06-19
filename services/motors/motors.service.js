@@ -1,4 +1,4 @@
-let { MoleculerError } = require("moleculer").Errors;
+let { MoleculerError } = require("moleculer").Errors
 
 const Motors = require("./mock/motors")
 const motors = new Motors()
@@ -8,6 +8,7 @@ module.exports = {
 	actions: {
 		// TODO: check state motor left, right; start & stop motor left, right
 	},
-	events: {
+	created() {
+
 	}
 }

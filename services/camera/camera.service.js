@@ -1,4 +1,4 @@
-let { MoleculerError } = require("moleculer").Errors;
+let { MoleculerError } = require("moleculer").Errors
 
 const Camera = require("./mock/camera")
 const camera = new Camera()
@@ -6,14 +6,17 @@ const camera = new Camera()
 module.exports = {
 	name: "camera",
 	actions: {
-		start(ctx) {
+		start (ctx) {
 			if(!camera.isRunning()) {
-				this.logger.info(`Starting Camera`);
+				this.logger.info(`Starting Camera`)
 				camera.start()
 			}
 		},
-	},
-
-	events: {
+		stop (ctx) {
+			if(camera.isRunning()) {
+				this.logger.info(`Camera stopped`)
+				camera.kill()
+			}
+		}
 	}
 }

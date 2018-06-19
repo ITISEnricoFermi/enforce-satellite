@@ -40,4 +40,3 @@ broker.createService({
 
 broker.start()
 	.then(() => broker.repl())
-	.then(() => broker.waitForServices("gps"))
