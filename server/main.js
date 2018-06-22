@@ -7,8 +7,8 @@ const IMU = require("./mock/imu")
 const THP = require("./mock/thp")
 const GPS = require("./mock/gps")
 const MOTORS = require("./mock/motors")
-const CAMERA = require("./mock/camera")
-const STORAGE = require("enforce-mysql")
+const CAMERA = require("nanopi-camera")
+const STORAGE = require("./mock/storage")
 
 const COMMS = require('./lib/comms')
 const SENSORS = require('./lib/sensors')
@@ -48,7 +48,11 @@ debug("Init imu")
 const imu = new IMU(null)
 
 debug("Init camera")
-const camera = new CAMERA().start()
+const camera = new CAMERA({
+	cameraName: "cam",
+	rootdir: undefined, //default to "./"
+	streamUrl: undefined //default to localhost:8080/?action=stream
+})
 
 debug("Init comunication")
 const comms = new COMMS(xbee)
@@ -71,6 +75,8 @@ new ENFORCE_CLI(comms, {
 	camera
 })
 
+
+camera.start()
 archiver.beginMission()
 
 // comms.on("command", (commandString) => {
@@ -146,7 +152,6 @@ sensors.on("position", d => {
 pilot.enableAutopilot(targeter)
 
 process.on('SIGINT', () => {
-	camera.kill()
 	sensors.stopAll()
 	if (process.env.DEBUG) process.exit(0)
 })
