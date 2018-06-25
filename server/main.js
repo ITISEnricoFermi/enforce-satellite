@@ -2,14 +2,9 @@ const debug = require("debug")("main")
 const config = require("../config.json")
 
 
-const XBee = require("./mock/XBee").XBee
 const MOTORS = require("./mock/motors")
 const CAMERA = require("nanopi-camera")
-const STORAGE = require("./mock/storage")
 
-const COMMS = require('./lib/comms')
-const SENSORS = require('./lib/sensors')
-const ARCHIVER = require("./lib/archiver")
 const TARGETER = require("./lib/targeter")
 const PILOT = require("./lib/pilot")
 const ENFORCE_CLI = require("enforce-cli")
@@ -29,11 +24,7 @@ targeter.setPosition({
 	y: 44.649649
 })
 
-debug("Init xbee")
-const xbee = new XBee(config.xbee ? config.xbee.port : "/dev/ttyS2", config.xbee ? config.xbee.baudRate : 115200)
 
-debug("Init storage")
-const storage = new STORAGE()
 
 debug("Init camera")
 const camera = new CAMERA({
@@ -42,15 +33,12 @@ const camera = new CAMERA({
 	streamUrl: "http://192.168.43.63:8080/?action=stream" //default to localhost:8080/?action=stream
 })
 
-debug("Init comunication")
-const comms = new COMMS(xbee)
+
 
 debug("Init pilot")
 const pilot = new PILOT(motors)
 
-debug("Init archiver")
-const archiver = new ARCHIVER(storage)
-
+const comms = require("./init/initComunications").init(config)
 const sensors = require("./init/initSensors").init(config)
 
 debug("Init cli")

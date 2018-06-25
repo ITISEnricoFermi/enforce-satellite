@@ -7,7 +7,7 @@ class GPS extends EventEmitter {
   constructor(port, delay) {
     super()
     this.port = port
-    this.delay = (delay && !isNaN(delay)) ? delay : 0
+    this.delay = (delay && !isNaN(delay)) ? delay : 10
     this._on = false
     this.running = false
     this.Start()
