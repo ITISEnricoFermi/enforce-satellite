@@ -1,12 +1,38 @@
 {
-    "gps": "/dev/ttyS0",
-    "xbee": {
-        "port": "COM6",
-        "baudRate": 115200
-    },
-    "backupStorage": {
-        "active": false,
-        "filename": "enforce-stg",
-        "path": "./"
-    } 
+	"communication": {
+		"xbee": {
+			"active": true,
+			"port": "COM6",
+			"baudRate": 115200
+		}
+	},
+	"storage": {
+		"bacup": {
+			"active": true,
+			"filename": "enforce-stg",
+			"path": "./"
+		},
+		"database": {
+			"active": false,
+			"loopInterval": 10,
+			"bufferLimit": 80000,
+			"host": "localhost",
+			"user": "enforce",
+			"password": "Illuminati",
+			"database": "enforce-db"
+		}
+	},
+	"sensors": {
+		"gps": {
+			"bus": "/dev/ttyS1",
+			"delay": 10
+		},
+		"imu": {
+			"bus": "/dev/i2c-0",
+			"delay": 10
+		},
+		"thp": {
+			"delay": 10
+		}
+	}
 }
