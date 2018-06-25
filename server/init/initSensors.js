@@ -20,23 +20,69 @@ const defaults = Object.freeze({
 	}
 })
 
-const init = (config) => {
-	debug("Init gps")
-	const gps = new GPS(defaults.gps.bus, defaults.gps.delay)
+const init = ({sensors}) => {
 
-	debug("Init thp")
-	const thp = new THP(defaults.thp.delay)
+	let gps = null,
+			imu = null,
+			thp = null
 
-	debug("Init imu")
-	const imu = new IMU(defaults.imu.bus, defaults.imu.delay)
+	if ("gps" in sensors) {
+		gps = getGps(sensors)
+	}
 
-	const sensors = new SENSORS({
+	if ("imu" in sensors) {
+		imu = getImu(sensors)
+	}
+
+	if ("thp" in sensors) {
+		thp = getThp(sensors)
+	}
+
+	const sens = new SENSORS({
 		thp,
 		imu,
 		gps
 	})
 
-	return sensors
+	return sens
+}
+
+function getBus(what, conf) {
+	if("bus" in conf)  {
+		return conf.bus
+	} else {
+		return defaults[what].bus
+	}
+}
+
+function getDelay(what, conf) {
+	if("delay" in conf)  {
+		return conf.delay
+	} else {
+		return defaults[what].delay
+	}
+}
+
+function getGps({gps}) {
+	debug("Init gps")
+	const bus = getBus("gps", gps)
+	const delay = getDelay("gps", gps)
+
+	return new GPS(bus, delay)
+}
+
+function getImu({imu}) {
+	debug("Init imu")
+	const bus = getBus("imu", imu)
+	const delay = getDelay("imu", imu)
+
+	return new IMU(bus, delay)
+}
+
+function getThp({thp}) {
+	debug("Init thp")
+	const delay = getDelay("thp", thp)
+	return new THP(delay)
 }
 
 module.exports = {
