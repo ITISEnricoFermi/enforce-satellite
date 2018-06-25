@@ -5,15 +5,12 @@ const comms = require("./init/initComunications").init(config)
 const sensors = require("./init/initSensors").init(config)
 const storage = require("./init/initArchive").init(config)
 const camera = require("./init/initCamera").init(config)
+const motors = require("./init/initMotors").init(config)
 
-const MOTORS = require("./mock/motors")
 
 const TARGETER = require("./lib/targeter")
 const PILOT = require("./lib/pilot")
 const ENFORCE_CLI = require("enforce-cli")
-
-debug("Init motors")
-const motors = new MOTORS()
 
 debug("Init targeter")
 const targeter = new TARGETER({

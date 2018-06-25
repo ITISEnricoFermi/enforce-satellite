@@ -39,5 +39,6 @@
 		"cameraName": "cam",
 		"rootdir": null,
 		"streamUrl": null
-	}
+	},
+	"motors": {}
 }
