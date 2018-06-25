@@ -7,7 +7,7 @@
 		}
 	},
 	"storage": {
-		"bacup": {
+		"backup": {
 			"active": true,
 			"filename": "enforce-stg",
 			"path": "./"
