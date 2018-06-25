@@ -34,5 +34,10 @@
 		"thp": {
 			"delay": 10
 		}
+	},
+	"camera": {
+		"cameraName": "cam",
+		"rootdir": null,
+		"streamUrl": null
 	}
 }
