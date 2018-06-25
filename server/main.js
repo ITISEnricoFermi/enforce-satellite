@@ -3,9 +3,6 @@ const config = require("../config.json")
 
 
 const XBee = require("./mock/XBee").XBee
-const IMU = require("./mock/imu")
-const THP = require("./mock/thp")
-const GPS = require("./mock/gps")
 const MOTORS = require("./mock/motors")
 const CAMERA = require("nanopi-camera")
 const STORAGE = require("./mock/storage")
@@ -38,20 +35,11 @@ const xbee = new XBee(config.xbee ? config.xbee.port : "/dev/ttyS2", config.xbee
 debug("Init storage")
 const storage = new STORAGE()
 
-debug("Init gps")
-const gps = new GPS(config.gps || "/dev/ttyS1")
-
-debug("Init thp")
-const thp = new THP()
-
-debug("Init imu")
-const imu = new IMU(null)
-
 debug("Init camera")
 const camera = new CAMERA({
 	cameraName: "cam",
 	rootdir: undefined, //default to "./"
-	streamUrl: undefined //default to localhost:8080/?action=stream
+	streamUrl: "http://192.168.43.63:8080/?action=stream" //default to localhost:8080/?action=stream
 })
 
 debug("Init comunication")
@@ -62,11 +50,8 @@ const pilot = new PILOT(motors)
 
 debug("Init archiver")
 const archiver = new ARCHIVER(storage)
-const sensors = new SENSORS({
-	thp,
-	imu,
-	gps
-})
+
+const sensors = require("./init/initSensors").init(config)
 
 debug("Init cli")
 new ENFORCE_CLI(comms, {
