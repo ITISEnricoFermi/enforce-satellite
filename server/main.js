@@ -1,9 +1,12 @@
 const debug = require("debug")("main")
 const config = require("../config.json")
 
+const comms = require("./init/initComunications").init(config)
+const sensors = require("./init/initSensors").init(config)
+const storage = require("./init/initArchive").init(config)
+const camera = require("./init/initCamera").init(config)
 
 const MOTORS = require("./mock/motors")
-const CAMERA = require("nanopi-camera")
 
 const TARGETER = require("./lib/targeter")
 const PILOT = require("./lib/pilot")
@@ -25,21 +28,8 @@ targeter.setPosition({
 })
 
 
-
-debug("Init camera")
-const camera = new CAMERA({
-	cameraName: "cam",
-	rootdir: undefined, //default to "./"
-	streamUrl: "http://192.168.43.63:8080/?action=stream" //default to localhost:8080/?action=stream
-})
-
-
-
 debug("Init pilot")
 const pilot = new PILOT(motors)
-
-const comms = require("./init/initComunications").init(config)
-const sensors = require("./init/initSensors").init(config)
 
 debug("Init cli")
 new ENFORCE_CLI(comms, {
