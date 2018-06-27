@@ -2,7 +2,7 @@
 	"communication": {
 		"xbee": {
 			"active": true,
-			"port": "COM6",
+			"port": "/dev/ttyS2",
 			"baudRate": 115200
 		}
 	},
