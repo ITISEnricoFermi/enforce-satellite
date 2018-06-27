@@ -18,22 +18,22 @@ const defaults = Object.freeze({
 	}
 })
 
-const init = (sensorsConfig) => {
+const init = (config) => {
 
 	let gps = null,
 		imu = null,
 		thp = null
-
-	if ("gps" in sensorsConfig) {
-		gps = getGps(sensorsConfig)
+  
+	if ("gps" in config) {
+		gps = getGps(config)
 	}
 
-	if ("imu" in sensorsConfig) {
-		imu = getImu(sensorsConfig)
+	if ("imu" in config) {
+		imu = getImu(config)
 	}
 
-	if ("thp" in sensorsConfig) {
-		thp = getThp(sensorsConfig)
+	if ("thp" in config) {
+		thp = getThp(config)
 	}
 
 	return new SENSORS({

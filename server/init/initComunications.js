@@ -9,12 +9,12 @@ const defaults = {
 	}
 }
 
-const init = (communicationConfig) => {
+const init = (config) => {
 
 	let method = null
 
-	if ("xbee" in communicationConfig && isXbeeActive(communicationConfig)) {
-		method = useXbee(communicationConfig)
+	if ("xbee" in config && isXbeeActive(config)) {
+		method = useXbee(config)
 	}
 
 	const comms = new COMMS(method)

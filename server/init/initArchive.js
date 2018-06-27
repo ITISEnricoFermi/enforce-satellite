@@ -9,14 +9,14 @@ const defaults = {
 	databaseActive: true
 }
 
-const init = (storageConfig) => {
+const init = (config) => {
 	let storageMethod = null
 
-	if ("backup" in storageConfig && isBackupActive(storageConfig)) {
-		storageMethod = useBackup(storageConfig)
+	if ("backup" in config && isBackupActive(config)) {
+		storageMethod = useBackup(config)
 	}
-	if ("database" in storageConfig && isDatabaseActive(storageConfig)) {
-		storageMethod = useDatabase(storageConfig)
+	if ("database" in config && isDatabaseActive(config)) {
+		storageMethod = useDatabase(config)
 	}
 
 	const archiver = new ARCHIVER(storageMethod)

@@ -1,7 +1,5 @@
 const config = require("../config.json")
 
-
-
 // TODO: abstract init function calls
 const comms = require("./init/initComunications").init(config.communication)
 const sensors = require("./init/initSensors").init(config.sensors)

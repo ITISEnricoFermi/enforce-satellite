@@ -1,7 +1,7 @@
 const CAMERA = require("nanopi-camera")
 
-const init = (cameraConfig) => {
-	return new CAMERA(cameraConfig)
+const init = (config) => {
+	return new CAMERA(config)
 }
 
 module.exports = {
