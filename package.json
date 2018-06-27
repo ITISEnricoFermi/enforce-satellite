@@ -4,7 +4,7 @@
 	"description": "",
 	"main": "server/main.js",
 	"scripts": {
-		"start": "export DEBUG=enforce-cli,enforce-cli:sensors || set DEBUG=enforce-cli,mock:xbee && node server/main.js",
+		"start": "node server/main.js",
 		"test": "echo \"Error: no test specified\" && exit 1"
 	},
 	"keywords": [],
