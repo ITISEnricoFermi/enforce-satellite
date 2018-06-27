@@ -1,4 +1,4 @@
-const XBee = require("../mock/XBee").XBee
+const XBee = require("module-xbee").XBee
 const COMMS = require('../lib/comms')
 
 const defaults = {
