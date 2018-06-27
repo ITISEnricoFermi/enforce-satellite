@@ -1,6 +1,4 @@
-const debug = require("debug")("init")
-
-const XBee = require("../mock/XBee").XBee
+const XBee = require("module-xbee").XBee
 const COMMS = require('../lib/comms')
 
 const defaults = {
@@ -19,14 +17,15 @@ const init = (config) => {
 		method = useXbee(config)
 	}
 
-	debug("Init comunication")
 	const comms = new COMMS(method)
 
 	return comms
 }
 
 // Utilities functions
-function getBaudRate({xbee}) {
+function getBaudRate({
+	xbee
+}) {
 	if ("baudRate" in xbee) {
 		return parseInt(xbee.baudRate)
 	} else {
@@ -34,7 +33,9 @@ function getBaudRate({xbee}) {
 	}
 }
 
-function getPort({xbee}) {
+function getPort({
+	xbee
+}) {
 	if ("port" in xbee) {
 		return xbee.port
 	} else {
@@ -42,7 +43,9 @@ function getPort({xbee}) {
 	}
 }
 
-function isXbeeActive({xbee}) {
+function isXbeeActive({
+	xbee
+}) {
 	if ("active" in xbee) {
 		return xbee.active
 	} else {
@@ -51,11 +54,10 @@ function isXbeeActive({xbee}) {
 }
 
 // USE functions
-function useXbee(communication) {
-	debug("Init xbee")
+function useXbee(communicationConfig) {
 	// Setup configurations
-	const port = getPort(communication),
-				baudRate = getBaudRate(communication)
+	const port = getPort(communicationConfig),
+		baudRate = getBaudRate(communicationConfig)
 
 	return new XBee(port, baudRate)
 }

@@ -1,5 +1,3 @@
-const debug = require("debug")("init")
-
 const DATABASE = require("enforce-mysql")
 
 const STORAGE = require("../mock/storage")
@@ -21,14 +19,15 @@ const init = (config) => {
 		storageMethod = useDatabase(config)
 	}
 
-	debug("Init archiver")
 	const archiver = new ARCHIVER(storageMethod)
 
 	return archiver
 }
 
 // utility functions
-function isBackupActive({backup}) {
+function isBackupActive({
+	backup
+}) {
 	if ("active" in backup) {
 		return backup.active
 	} else {
@@ -36,7 +35,9 @@ function isBackupActive({backup}) {
 	}
 }
 
-function isDatabaseActive({database}) {
+function isDatabaseActive({
+	database
+}) {
 	if ("active" in database) {
 		return database.active
 	} else {
@@ -45,13 +46,15 @@ function isDatabaseActive({database}) {
 }
 
 // USE functions
-function useBackup({backup}) {
-	debug("Init storage")
+function useBackup({
+	backup
+}) {
 	return new STORAGE(backup)
 }
 
-function useDatabase({database}) {
-	debug("Init database")
+function useDatabase({
+	database
+}) {
 	return new DATABASE(database)
 }
 
