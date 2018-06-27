@@ -7,7 +7,7 @@ const {
 class THP extends EventEmitter {
   constructor(delay) {
     super()
-    this.delay = (delay && !isNaN(delay)) ? delay : 0
+    this.delay = (delay && !isNaN(delay)) ? delay : 10
 		this._on = false
 		this.running = false
     const options = {

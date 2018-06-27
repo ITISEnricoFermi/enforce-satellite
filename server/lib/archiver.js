@@ -18,9 +18,13 @@ class Archiver {
 
 	saveData(data) {
 		if (this.missionId === null) return
-
-		data = Object.assign(data, {missionID: this.missionId})
-		this.storage.save(data)
+		return new Promise((resolve, reject) => {
+			data = Object.assign(data, {
+				missionID: this.missionId
+			})
+			this.storage.save(data)
+			resolve()
+		})
 	}
 }
 

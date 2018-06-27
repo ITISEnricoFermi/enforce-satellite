@@ -1,74 +1,30 @@
-const debug = require("debug")("main")
 const config = require("../config.json")
 
+// TODO: abstract init function calls
+const comms = require("./init/initComunications").init(config.communication)
+const sensors = require("./init/initSensors").init(config.sensors)
+const storage = require("./init/initArchive").init(config.storage)
+const camera = require("./init/initCamera").init(config.camera)
+const motors = require("./init/initMotors").init(config.motors)
 
-const XBee = require("./mock/XBee").XBee
-const IMU = require("./mock/imu")
-const THP = require("./mock/thp")
-const GPS = require("./mock/gps")
-const MOTORS = require("./mock/motors")
-const CAMERA = require("nanopi-camera")
-const STORAGE = require("./mock/storage")
 
-const COMMS = require('./lib/comms')
-const SENSORS = require('./lib/sensors')
-const ARCHIVER = require("./lib/archiver")
 const TARGETER = require("./lib/targeter")
 const PILOT = require("./lib/pilot")
 const ENFORCE_CLI = require("enforce-cli")
 
-debug("Init motors")
-const motors = new MOTORS()
-
-debug("Init targeter")
 const targeter = new TARGETER({
 	x: 10.932707,
 	y: 44.649381
 })
 
-debug("Init targeter position")
 targeter.setPosition({
 	x: 10.929782,
 	y: 44.649649
 })
 
-debug("Init xbee")
-const xbee = new XBee(config.xbee ? config.xbee.port : "/dev/ttyS2", config.xbee ? config.xbee.baudRate : 115200)
 
-debug("Init storage")
-const storage = new STORAGE()
-
-debug("Init gps")
-const gps = new GPS(config.gps || "/dev/ttyS1")
-
-debug("Init thp")
-const thp = new THP()
-
-debug("Init imu")
-const imu = new IMU(null)
-
-debug("Init camera")
-const camera = new CAMERA({
-	cameraName: "cam",
-	rootdir: undefined, //default to "./"
-	streamUrl: undefined //default to localhost:8080/?action=stream
-})
-
-debug("Init comunication")
-const comms = new COMMS(xbee)
-
-debug("Init pilot")
 const pilot = new PILOT(motors)
 
-debug("Init archiver")
-const archiver = new ARCHIVER(storage)
-const sensors = new SENSORS({
-	thp,
-	imu,
-	gps
-})
-
-debug("Init cli")
 new ENFORCE_CLI(comms, {
 	sensors,
 	motors,
@@ -80,7 +36,7 @@ camera.start()
 archiver.beginMission()
 
 // comms.on("command", (commandString) => {
-// 	debug('Received command: ' + commandString)
+// 	console.log('Received command: ' + commandString)
 // 	switch (commandString[0]) {
 // 		case 'x':
 // 			let locarr = commandString.split(",")

@@ -6,7 +6,7 @@ const BNO055 = require('./BNO055')
 class IMU extends EventEmitter {
     constructor(i2cDev, delay) {
         super()
-        this.delay = (delay && !isNaN(delay)) ? delay : 0
+        this.delay = (delay && !isNaN(delay)) ? delay : 10
         this._on = false
         this.running = false
         this.imu = new BNO055({
