@@ -11,14 +11,14 @@ const defaults = {
 	databaseActive: true
 }
 
-const init = (storage) => {
+const init = (config) => {
 	let storageMethod = null
 
-	if ("backup" in storage && isBackupActive(storage)) {
-		storageMethod = useBackup(storage)
+	if ("backup" in config && isBackupActive(config)) {
+		storageMethod = useBackup(config)
 	}
-	if ("database" in storage && isDatabaseActive(storage)) {
-		storageMethod = useDatabase(storage)
+	if ("database" in config && isDatabaseActive(config)) {
+		storageMethod = useDatabase(config)
 	}
 
 	debug("Init archiver")
