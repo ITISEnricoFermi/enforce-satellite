@@ -2,7 +2,7 @@
 	"name": "enforce-satellite",
 	"version": "1.0.0",
 	"description": "",
-	"main": "index.js",
+	"main": "server/main.js",
 	"scripts": {
 		"start": "export DEBUG=enforce-cli,enforce-cli:sensors || set DEBUG=enforce-cli,mock:xbee && node server/main.js",
 		"test": "echo \"Error: no test specified\" && exit 1"

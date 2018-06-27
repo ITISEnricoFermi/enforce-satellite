@@ -11,9 +11,7 @@ const defaults = {
 	}
 }
 
-const init = ({
-	communication
-}) => {
+const init = (communication) => {
 
 	let method = null
 

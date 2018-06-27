@@ -20,7 +20,7 @@ const defaults = Object.freeze({
 	}
 })
 
-const init = ({sensors}) => {
+const init = (sensors) => {
 
 	let gps = null,
 			imu = null,

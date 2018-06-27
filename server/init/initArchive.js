@@ -11,7 +11,7 @@ const defaults = {
 	databaseActive: true
 }
 
-const init = ({storage}) => {
+const init = (storage) => {
 	let storageMethod = null
 
 	if ("backup" in storage && isBackupActive(storage)) {
