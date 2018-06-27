@@ -49,14 +49,12 @@ function isDatabaseActive({
 function useBackup({
 	backup
 }) {
-	debug("Init storage")
 	return new STORAGE(backup)
 }
 
 function useDatabase({
 	database
 }) {
-	debug("Init database")
 	return new DATABASE(database)
 }
 
