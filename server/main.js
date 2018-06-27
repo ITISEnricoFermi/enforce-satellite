@@ -28,7 +28,8 @@ const pilot = new PILOT(motors)
 new ENFORCE_CLI(comms, {
 	sensors,
 	motors,
-	camera
+	camera,
+	pilot
 })
 
 
@@ -44,11 +45,6 @@ archiver.beginMission()
 // 				x: parseFloat(locarr[1]),
 // 				y: parseFloat(locarr[0].slice(1))
 // 			})
-// 			break;
-// 		case 'p':
-// 			if (commandString[1] === '0') pilot.disableAutopilot()
-// 			if (commandString[1] === '1') pilot.enableAutopilot()
-// 			comms.send("status", Object.assign({}, sensors.status(), motors.getStatus(), pilot.status()))
 // 			break;
 // 		default:
 // 			comms.send(`Command ${commandString} not defined.`)
