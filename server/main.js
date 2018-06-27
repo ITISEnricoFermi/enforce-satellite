@@ -1,34 +1,32 @@
-const debug = require("debug")("main")
 const config = require("../config.json")
 
-const comms = require("./init/initComunications").init(config)
-const sensors = require("./init/initSensors").init(config)
-const storage = require("./init/initArchive").init(config)
-const camera = require("./init/initCamera").init(config)
-const motors = require("./init/initMotors").init(config)
+
+
+// TODO: abstract init function calls
+const comms = require("./init/initComunications").init(config.communication)
+const sensors = require("./init/initSensors").init(config.sensors)
+const storage = require("./init/initArchive").init(config.storage)
+const camera = require("./init/initCamera").init(config.camera)
+const motors = require("./init/initMotors").init(config.motors)
 
 
 const TARGETER = require("./lib/targeter")
 const PILOT = require("./lib/pilot")
 const ENFORCE_CLI = require("enforce-cli")
 
-debug("Init targeter")
 const targeter = new TARGETER({
 	x: 10.932707,
 	y: 44.649381
 })
 
-debug("Init targeter position")
 targeter.setPosition({
 	x: 10.929782,
 	y: 44.649649
 })
 
 
-debug("Init pilot")
 const pilot = new PILOT(motors)
 
-debug("Init cli")
 new ENFORCE_CLI(comms, {
 	sensors,
 	motors,
@@ -40,7 +38,7 @@ camera.start()
 archiver.beginMission()
 
 // comms.on("command", (commandString) => {
-// 	debug('Received command: ' + commandString)
+// 	console.log('Received command: ' + commandString)
 // 	switch (commandString[0]) {
 // 		case 'x':
 // 			let locarr = commandString.split(",")

@@ -11,14 +11,12 @@ const defaults = {
 	}
 }
 
-const init = ({
-	communication
-}) => {
+const init = (communicationConfig) => {
 
 	let method = null
 
-	if ("xbee" in communication && isXbeeActive(communication)) {
-		method = useXbee(communication)
+	if ("xbee" in communicationConfig && isXbeeActive(communicationConfig)) {
+		method = useXbee(communicationConfig)
 	}
 
 	debug("Init comunication")
@@ -28,7 +26,9 @@ const init = ({
 }
 
 // Utilities functions
-function getBaudRate({xbee}) {
+function getBaudRate({
+	xbee
+}) {
 	if ("baudRate" in xbee) {
 		return parseInt(xbee.baudRate)
 	} else {
@@ -36,7 +36,9 @@ function getBaudRate({xbee}) {
 	}
 }
 
-function getPort({xbee}) {
+function getPort({
+	xbee
+}) {
 	if ("port" in xbee) {
 		return xbee.port
 	} else {
@@ -44,7 +46,9 @@ function getPort({xbee}) {
 	}
 }
 
-function isXbeeActive({xbee}) {
+function isXbeeActive({
+	xbee
+}) {
 	if ("active" in xbee) {
 		return xbee.active
 	} else {
@@ -57,7 +61,7 @@ function useXbee(communication) {
 	debug("Init xbee")
 	// Setup configurations
 	const port = getPort(communication),
-				baudRate = getBaudRate(communication)
+		baudRate = getBaudRate(communication)
 
 	return new XBee(port, baudRate)
 }

@@ -11,24 +11,25 @@ const defaults = {
 	databaseActive: true
 }
 
-const init = ({storage}) => {
+const init = (storageConfig) => {
 	let storageMethod = null
 
-	if ("backup" in storage && isBackupActive(storage)) {
-		storageMethod = useBackup(storage)
+	if ("backup" in storageConfig && isBackupActive(storageConfig)) {
+		storageMethod = useBackup(storageConfig)
 	}
-	if ("database" in storage && isDatabaseActive(storage)) {
-		storageMethod = useDatabase(storage)
+	if ("database" in storageConfig && isDatabaseActive(storageConfig)) {
+		storageMethod = useDatabase(storageConfig)
 	}
 
-	debug("Init archiver")
 	const archiver = new ARCHIVER(storageMethod)
 
 	return archiver
 }
 
 // utility functions
-function isBackupActive({backup}) {
+function isBackupActive({
+	backup
+}) {
 	if ("active" in backup) {
 		return backup.active
 	} else {
@@ -36,7 +37,9 @@ function isBackupActive({backup}) {
 	}
 }
 
-function isDatabaseActive({database}) {
+function isDatabaseActive({
+	database
+}) {
 	if ("active" in database) {
 		return database.active
 	} else {
@@ -45,12 +48,16 @@ function isDatabaseActive({database}) {
 }
 
 // USE functions
-function useBackup({backup}) {
+function useBackup({
+	backup
+}) {
 	debug("Init storage")
 	return new STORAGE(backup)
 }
 
-function useDatabase({database}) {
+function useDatabase({
+	database
+}) {
 	debug("Init database")
 	return new DATABASE(database)
 }

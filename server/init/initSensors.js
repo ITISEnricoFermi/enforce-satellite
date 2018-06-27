@@ -9,10 +9,10 @@ const SENSORS = require('../lib/sensors')
 const defaults = Object.freeze({
 	imu: {
 		bus: "/dev/i2c-0",
-		delay: 10						// in ms
+		delay: 10 // in ms
 	},
 	thp: {
-		delay: 10						// im ms
+		delay: 10 // im ms
 	},
 	gps: {
 		bus: "/dev/ttyS1",
@@ -20,35 +20,33 @@ const defaults = Object.freeze({
 	}
 })
 
-const init = ({sensors}) => {
+const init = (sensorsConfig) => {
 
 	let gps = null,
-			imu = null,
-			thp = null
+		imu = null,
+		thp = null
 
-	if ("gps" in sensors) {
-		gps = getGps(sensors)
+	if ("gps" in sensorsConfig) {
+		gps = getGps(sensorsConfig)
 	}
 
-	if ("imu" in sensors) {
-		imu = getImu(sensors)
+	if ("imu" in sensorsConfig) {
+		imu = getImu(sensorsConfig)
 	}
 
-	if ("thp" in sensors) {
-		thp = getThp(sensors)
+	if ("thp" in sensorsConfig) {
+		thp = getThp(sensorsConfig)
 	}
 
-	const sens = new SENSORS({
+	return new SENSORS({
 		thp,
 		imu,
 		gps
 	})
-
-	return sens
 }
 
 function getBus(what, conf) {
-	if("bus" in conf)  {
+	if ("bus" in conf) {
 		return conf.bus
 	} else {
 		return defaults[what].bus
@@ -56,14 +54,16 @@ function getBus(what, conf) {
 }
 
 function getDelay(what, conf) {
-	if("delay" in conf)  {
+	if ("delay" in conf) {
 		return conf.delay
 	} else {
 		return defaults[what].delay
 	}
 }
 
-function getGps({gps}) {
+function getGps({
+	gps
+}) {
 	debug("Init gps")
 	const bus = getBus("gps", gps)
 	const delay = getDelay("gps", gps)
@@ -71,7 +71,9 @@ function getGps({gps}) {
 	return new GPS(bus, delay)
 }
 
-function getImu({imu}) {
+function getImu({
+	imu
+}) {
 	debug("Init imu")
 	const bus = getBus("imu", imu)
 	const delay = getDelay("imu", imu)
@@ -79,7 +81,9 @@ function getImu({imu}) {
 	return new IMU(bus, delay)
 }
 
-function getThp({thp}) {
+function getThp({
+	thp
+}) {
 	debug("Init thp")
 	const delay = getDelay("thp", thp)
 	return new THP(delay)
