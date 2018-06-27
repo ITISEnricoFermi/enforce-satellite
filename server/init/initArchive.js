@@ -1,5 +1,3 @@
-const debug = require("debug")("init")
-
 const DATABASE = require("enforce-mysql")
 
 const STORAGE = require("../mock/storage")

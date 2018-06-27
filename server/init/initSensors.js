@@ -1,5 +1,3 @@
-const debug = require("debug")("init")
-
 const IMU = require("../mock/imu")
 const THP = require("../mock/thp")
 const GPS = require("../mock/gps")
@@ -64,7 +62,6 @@ function getDelay(what, conf) {
 function getGps({
 	gps
 }) {
-	debug("Init gps")
 	const bus = getBus("gps", gps)
 	const delay = getDelay("gps", gps)
 
@@ -74,7 +71,6 @@ function getGps({
 function getImu({
 	imu
 }) {
-	debug("Init imu")
 	const bus = getBus("imu", imu)
 	const delay = getDelay("imu", imu)
 
@@ -84,7 +80,6 @@ function getImu({
 function getThp({
 	thp
 }) {
-	debug("Init thp")
 	const delay = getDelay("thp", thp)
 	return new THP(delay)
 }
