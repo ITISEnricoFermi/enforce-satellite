@@ -29,28 +29,14 @@ new ENFORCE_CLI(comms, {
 	sensors,
 	motors,
 	camera,
-	pilot
+	pilot,
+	targeter
 })
 
 
 camera.start()
 archiver.beginMission()
 
-// comms.on("command", (commandString) => {
-// 	console.log('Received command: ' + commandString)
-// 	switch (commandString[0]) {
-// 		case 'x':
-// 			let locarr = commandString.split(",")
-// 			targeter.setTarget({
-// 				x: parseFloat(locarr[1]),
-// 				y: parseFloat(locarr[0].slice(1))
-// 			})
-// 			break;
-// 		default:
-// 			comms.send(`Command ${commandString} not defined.`)
-// 			break;
-// 	}
-// })
 
 sensors.on("quaternion", d => {
 	comms.send("orientation", d)
@@ -88,10 +74,12 @@ sensors.on("position", d => {
 	archiver.saveData({
 		position: d
 	})
-	//    targeter.setPosition({
-	//        x: d.longitude,
-	//        y: d.latitude
-	//    })
+
+	targeter.setPosition({
+		x: d.longitude,
+		y: d.latitude
+	})
+
 	comms.send("position", d)
 	comms.send("target", Object.assign({}, {
 		target: targeter.target
@@ -99,6 +87,7 @@ sensors.on("position", d => {
 		directionD: targeter.getTargetDirectionDelta(),
 		distance: targeter.getTargetDistance()
 	}))
+
 })
 
 pilot.enableAutopilot(targeter)
@@ -107,3 +96,8 @@ process.on('SIGINT', () => {
 	sensors.stopAll()
 	if (process.env.DEBUG) process.exit(0)
 })
+
+
+setInterval(() => {
+	console.log(`TARGET ==> { X: ${targeter.target.x}, Y: ${targeter.target.y}}`)
+}, 2000)
