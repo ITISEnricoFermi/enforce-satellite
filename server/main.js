@@ -3,7 +3,7 @@ const config = require("../config.json")
 // TODO: abstract init function calls
 const comms = require("./init/initComunications").init(config.communication)
 const sensors = require("./init/initSensors").init(config.sensors)
-const storage = require("./init/initArchive").init(config.storage)
+const archiver = require("./init/initArchive").init(config.storage)
 const camera = require("./init/initCamera").init(config.camera)
 const motors = require("./init/initMotors").init(config.motors)
 
