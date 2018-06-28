@@ -24,8 +24,7 @@
 	},
 	"sensors": {
 		"gps": {
-			"bus": "/dev/ttyS1",
-			"delay": 10
+			"bus": "/dev/ttyS1"
 		},
 		"imu": {
 			"bus": "/dev/i2c-0",
