@@ -1,6 +1,6 @@
 const DATABASE = require("enforce-mysql")
 
-const STORAGE = require("../storage/StorageClass")
+const STORAGE = require("../mock/storage")
 
 const ARCHIVER = require("../lib/archiver")
 
@@ -49,7 +49,7 @@ function isDatabaseActive({
 function useBackup({
 	backup
 }) {
-	return new STORAGE(backup)
+	return new STORAGE(backup.filename, backup.path)
 }
 
 function useDatabase({
