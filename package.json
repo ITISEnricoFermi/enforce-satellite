@@ -19,7 +19,7 @@
 		"enforce-cli": "git+https://github.com/ITISEnricoFermi/enforce-cli.git#v0.0.3",
 		"enforce-mysql": "git+https://github.com/ITISEnricoFermi/enforce-mysql.git#v1.0.4",
 		"module-xbee": "git+https://github.com/n4y0n/node-xbee.git#v0.1.2",
-		"node-nan": "git+http://git.riccardosangiorgio.com/n4y0n/libgps.git#v1.0.2",
+		"node-breakout-v3": "git+https://github.com/ITISEnricoFermi/node-breakout-v3.git#v0.1.1",
 		"i2c-bus": "^1.2.0",
 		"onoff": "^3.0.2",
 		"i2c": "^0.2.3",
