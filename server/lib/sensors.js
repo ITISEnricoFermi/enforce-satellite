@@ -76,9 +76,9 @@ class Sensors extends EventEmitter {
 	setGps(state) {
 		if (this.SENSORS.gps) {
 			if (state === true) {
-				this.gps.StartLoop()
+				this.gps.start()
 			} else if (state === false) {
-				this.gps.StopLoop()
+				this.gps.stop()
 			} else {
 				debug(state + " is not a valid state")
 			}
