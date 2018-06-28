@@ -1,4 +1,4 @@
-const MOTORS = require("../mock/motors")
+const MOTORS = require("../deps/motors")
 
 const init = (config) => {
 	return new MOTORS()

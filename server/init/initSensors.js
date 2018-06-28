@@ -1,5 +1,5 @@
-const IMU = require("../mock/imu")
-const THP = require("../mock/thp")
+const IMU = require("../deps/imu")
+const THP = require("../deps/thp")
 const GPS = require("node-breakout-v3")
 
 const SENSORS = require('../lib/sensors')

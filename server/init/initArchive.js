@@ -1,6 +1,6 @@
 const DATABASE = require("enforce-mysql")
 
-const STORAGE = require("../mock/storage")
+const STORAGE = require("../storage/StorageClass")
 
 const ARCHIVER = require("../lib/archiver")
 
