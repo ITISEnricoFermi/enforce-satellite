@@ -51,7 +51,7 @@ class Sensors extends EventEmitter {
 				longitude: d.longitude,
 				altitude: d.altitude
 			})
-			this.emit("rawposition", d)
+			this.emit("rawgps", d)
 		})
 	}
 

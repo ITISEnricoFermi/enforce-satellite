@@ -1,6 +1,6 @@
 const IMU = require("../mock/imu")
 const THP = require("../mock/thp")
-const GPS = require("../mock/gps")
+const GPS = require("node-breakout-v3")
 
 const SENSORS = require('../lib/sensors')
 
@@ -13,8 +13,7 @@ const defaults = Object.freeze({
 		delay: 10 // im ms
 	},
 	gps: {
-		bus: "/dev/ttyS1",
-		delay: 10
+		bus: "/dev/ttyS1"
 	}
 })
 
@@ -23,7 +22,7 @@ const init = (config) => {
 	let gps = null,
 		imu = null,
 		thp = null
-  
+
 	if ("gps" in config) {
 		gps = getGps(config)
 	}
@@ -63,9 +62,8 @@ function getGps({
 	gps
 }) {
 	const bus = getBus("gps", gps)
-	const delay = getDelay("gps", gps)
 
-	return new GPS(bus, delay)
+	return new GPS(bus)
 }
 
 function getImu({
