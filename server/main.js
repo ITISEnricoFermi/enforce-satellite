@@ -96,8 +96,3 @@ process.on('SIGINT', () => {
 	sensors.stopAll()
 	if (process.env.DEBUG) process.exit(0)
 })
-
-
-setInterval(() => {
-	console.log(`TARGET ==> { X: ${targeter.target.x}, Y: ${targeter.target.y}}`)
-}, 2000)
