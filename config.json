@@ -10,7 +10,7 @@
 		"backup": {
 			"active": true,
 			"filename": "enforce-stg",
-			"path": "./"
+			"path": "/mnt/ntfs/"
 		},
 		"database": {
 			"active": false,
@@ -36,7 +36,7 @@
 	},
 	"camera": {
 		"cameraName": "cam",
-		"rootdir": null,
+		"rootdir": "/mnt/ntfs/",
 		"streamUrl": null
 	},
 	"motors": {}
