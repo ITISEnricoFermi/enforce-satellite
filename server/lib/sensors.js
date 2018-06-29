@@ -38,6 +38,8 @@ class Sensors extends EventEmitter {
 		}
 
 		this.currentAltitude = 0
+		this.timestamp = 0
+		this.cooldown = 50
 	}
 
 	_initThp(sensors) {
@@ -53,6 +55,10 @@ class Sensors extends EventEmitter {
 	_initGps(sensors) {
 		this.gps = sensors.gps
 		this.gps.on("data", d => {
+
+			if (Date.now() - this.timestamp < this.cooldown) return
+			this.timestamp = Date.now()
+
 			this.emit("position", {
 				latitude: d.latitude,
 				longitude: d.longitude,
