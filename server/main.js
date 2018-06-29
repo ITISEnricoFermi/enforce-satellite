@@ -94,5 +94,5 @@ pilot.enableAutopilot(targeter)
 
 process.on('SIGINT', () => {
 	sensors.stopAll()
-	if (process.env.DEBUG) process.exit(0)
+	process.exit(0)
 })
