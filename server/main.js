@@ -94,5 +94,17 @@ pilot.enableAutopilot(targeter)
 
 process.on('SIGINT', () => {
 	sensors.stopAll()
+	camcorder.stop()
 	if (process.env.DEBUG) process.exit(0)
 })
+
+//Video recording
+const Camcorder = require('./deps/camcorder')
+
+camcorder = new Camcorder(
+	config.cameraFFMPEG.path, 
+	config.cameraFFMPEG.fps, 
+	config.cameraFFMPEG.cameraName,
+	config.cameraFFMPEG.codec)
+	
+camcorder.start('MainMission')

@@ -39,5 +39,11 @@
 		"rootdir": "/mnt/ntfs/",
 		"streamUrl": null
 	},
-	"motors": {}
+	"motors": {},
+	"cameraFFMPEG": {
+		"path": "./img/",
+		"fps": 10,
+		"cameraName": "HP Webcam",
+		"codec": "dshow" 
+	}
 }
