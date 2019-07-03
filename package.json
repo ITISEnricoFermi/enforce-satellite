@@ -15,7 +15,7 @@
 		"chai": "^4.2.0",
 		"debug": "^4.1.1",
 		"mocha": "^5.1.1",
-		"nanopi-camera": "git+https://github.com/ITISEnricoFermi/nanopi-camera.git#v0.0.3",
+		"nanopi-camera": "git+https://github.com/ITISEnricoFermi/nanopi-camera.git#v1.0.0",
 		"enforce-cli": "git+https://github.com/ITISEnricoFermi/enforce-cli.git#v0.0.6",
 		"enforce-mysql": "git+https://github.com/ITISEnricoFermi/enforce-mysql.git#v1.0.4",
 		"module-xbee": "git+https://github.com/n4y0n/node-xbee.git#v1.0.2",
