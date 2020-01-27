@@ -11,7 +11,7 @@
 	"author": "Ernesto Montada Romero",
 	"license": "MIT",
 	"dependencies": {
-		"async": "^3.1.0",
+		"async": "^3.1.1",
 		"chai": "^4.2.0",
 		"debug": "^4.1.1",
 		"mocha": "^5.1.1",
